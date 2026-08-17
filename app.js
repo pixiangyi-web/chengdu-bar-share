@@ -46,15 +46,26 @@ document.getElementById('bar-count').textContent=bars.length;document.getElement
 renderRanking();
 
 const mappedBars=bars.filter(bar=>bar.lat!=null&&bar.lon!=null);
-const groups=[...mappedBars.reduce((map,bar)=>{const group=map.get(bar.areaKey)||{name:bar.areaKey,bars:[],lat:0,lon:0};group.bars.push(bar);group.lat+=bar.lat;group.lon+=bar.lon;map.set(bar.areaKey,group);return map},new Map()).values()].map(group=>({...group,lat:group.lat/group.bars.length,lon:group.lon/group.bars.length})).sort((a,b)=>b.bars.length-a.bars.length);
+function wgsToGcj(lat,lon){
+  if(lon<72.004||lon>137.8347||lat<.8293||lat>55.8271)return[lat,lon];
+  const rad=Math.PI/180,a=6378245,ee=.006693421622965943,x=lon-105,y=lat-35;
+  let dLat=-100+2*x+3*y+.2*y*y+.1*x*y+.2*Math.sqrt(Math.abs(x));
+  let dLon=300+x+2*y+.1*x*x+.1*x*y+.1*Math.sqrt(Math.abs(x));
+  dLat+=(20*Math.sin(6*x*Math.PI)+20*Math.sin(2*x*Math.PI))*2/3+(20*Math.sin(y*Math.PI)+40*Math.sin(y/3*Math.PI))*2/3+(160*Math.sin(y/12*Math.PI)+320*Math.sin(y*Math.PI/30))*2/3;
+  dLon+=(20*Math.sin(6*x*Math.PI)+20*Math.sin(2*x*Math.PI))*2/3+(20*Math.sin(x*Math.PI)+40*Math.sin(x/3*Math.PI))*2/3+(150*Math.sin(x/12*Math.PI)+300*Math.sin(x/30*Math.PI))*2/3;
+  const rLat=lat*rad,magic=1-ee*Math.sin(rLat)**2,sqrt=Math.sqrt(magic);
+  return[lat+dLat*180/((a*(1-ee))/(magic*sqrt)*Math.PI),lon+dLon*180/(a/sqrt*Math.cos(rLat)*Math.PI)];
+}
+const mapBars=mappedBars.map(bar=>{const[mapLat,mapLon]=wgsToGcj(bar.lat,bar.lon);return{...bar,mapLat,mapLon}});
+const groups=[...mapBars.reduce((map,bar)=>{const group=map.get(bar.areaKey)||{name:bar.areaKey,bars:[],lat:0,lon:0};group.bars.push(bar);group.lat+=bar.mapLat;group.lon+=bar.mapLon;map.set(bar.areaKey,group);return map},new Map()).values()].map(group=>({...group,lat:group.lat/group.bars.length,lon:group.lon/group.bars.length})).sort((a,b)=>b.bars.length-a.bars.length);
 const map=L.map('map',{zoomControl:true,preferCanvas:true,zoomSnap:.25});
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);
-map.fitBounds(L.latLngBounds(mappedBars.map(bar=>[bar.lat,bar.lon])),{padding:[18,18]});
-const heat=L.heatLayer(mappedBars.map(bar=>[bar.lat,bar.lon,1]),{radius:42,blur:25,minOpacity:.25,maxZoom:14,gradient:{.12:'#27b99a',.4:'#f4d35e',.68:'#ff8a48',1:'#e83338'}}).addTo(map);
+L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}',{subdomains:'1234',maxZoom:19,attribution:'© 高德地图'}).addTo(map);
+map.fitBounds(L.latLngBounds(mapBars.map(bar=>[bar.mapLat,bar.mapLon])),{padding:[18,18]});
+const heat=L.heatLayer(mapBars.map(bar=>[bar.mapLat,bar.mapLon,1]),{radius:42,blur:25,minOpacity:.25,maxZoom:14,gradient:{.12:'#27b99a',.4:'#f4d35e',.68:'#ff8a48',1:'#e83338'}}).addTo(map);
 const areaLayer=L.layerGroup().addTo(map);const markerLayer=L.layerGroup().addTo(map);
 groups.forEach(group=>{const size=Math.min(48,24+Math.sqrt(group.bars.length)*6);const icon=L.divIcon({className:'area-bubble',html:String(group.bars.length),iconSize:[size,size],iconAnchor:[size/2,size/2]});L.marker([group.lat,group.lon],{icon}).bindTooltip(`${group.name} · ${group.bars.length}家`).on('click',()=>selectArea(group.name,true)).addTo(areaLayer)});
-mappedBars.forEach(bar=>L.circleMarker([bar.lat,bar.lon],{radius:5,color:'#fffaf1',weight:2,fillColor:'#1c1814',fillOpacity:.9}).bindTooltip(`${bar.rank}. ${bar.name}`).on('click',()=>selectArea(bar.areaKey,false)).addTo(markerLayer));
-function updateMapLayers(){const detailed=map.getZoom()>=13.5;detailed?map.removeLayer(areaLayer):areaLayer.addTo(map);detailed?markerLayer.addTo(map):map.removeLayer(markerLayer);heat.setOptions({radius:detailed?30:42,blur:detailed?18:25})}
+mapBars.forEach(bar=>L.circleMarker([bar.mapLat,bar.mapLon],{radius:5,color:'#fffaf1',weight:2,fillColor:'#1c1814',fillOpacity:.9}).bindTooltip(`${bar.rank}. ${bar.name}`).on('click',()=>selectArea(bar.areaKey,false)).addTo(markerLayer));
+function updateMapLayers(){const zoom=map.getZoom(),detailed=zoom>=13.5,overview=zoom<12.25;overview||detailed?map.removeLayer(areaLayer):areaLayer.addTo(map);detailed?markerLayer.addTo(map):map.removeLayer(markerLayer);heat.setOptions({radius:detailed?30:42,blur:detailed?18:25})}
 function districtItem(bar){const link=bar.dianpingUrl?`<a class="district-dp-link" href="${esc(bar.dianpingUrl)}" target="_blank" rel="noopener"><i data-lucide="external-link"></i>大众点评</a>`:'<span class="district-no-link">暂无点评链接</span>';return `<article class="district-item"><div class="district-item-head"><h4>${esc(bar.name)}</h4><span class="district-rank">#${bar.rank} · ${formatScore(bar.scores.total)}</span></div><div class="district-meta"><span>${esc(bar.type)}</span><span>${formatMoney(bar.average)}/人</span>${link}</div>${tagsHtml(bar.features,4)}</article>`}
 function selectArea(name,zoom){const group=groups.find(item=>item.name===name);if(!group)return;state.selectedArea=name;document.getElementById('district-name').textContent=name;document.getElementById('district-count').textContent=`${group.bars.length} 家`;document.getElementById('district-list').innerHTML=group.bars.sort((a,b)=>a.rank-b.rank).map(districtItem).join('');lucide.createIcons({attrs:{'stroke-width':1.8}});if(zoom){map.flyTo([group.lat,group.lon],Math.max(14,map.getZoom()),{duration:.65})}}
 function nearestArea(){if(map.getZoom()<13.5)return;const center=map.getCenter();let nearest=null,distance=Infinity;groups.forEach(group=>{const d=center.distanceTo([group.lat,group.lon]);if(d<distance){distance=d;nearest=group}});if(nearest&&distance<6500)selectArea(nearest.name,false)}
