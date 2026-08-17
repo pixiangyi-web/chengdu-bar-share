@@ -25,6 +25,7 @@
       </div>
       <div class="intro-meta">
         <p>以大众点评、小红书、专业背书、本地榜单及旅游/英文媒体信息合并计算。</p>
+        <button class="method-button" id="method-button" type="button" style="margin-bottom:30px"><i data-lucide="calculator"></i>详细计算方式</button>
         <dl><div><dt>收录酒吧</dt><dd id="bar-count">152</dd></div><div><dt>可用点评链接</dt><dd id="link-count">148</dd></div><div><dt>覆盖商圈</dt><dd id="area-count">54</dd></div></dl>
       </div>
     </section>
@@ -71,6 +72,24 @@
       <p class="map-note">定位口径：依据榜单商圈与公开街道信息生成商圈级锚点；位置待补的门店不进入热力计算。地图用于行业分布观察，不作导航。</p>
     </section>
   </main>
+
+  <dialog class="method-dialog" id="method-dialog" aria-labelledby="method-dialog-title">
+    <div class="dialog-head"><div><p class="section-index">SCORING METHODOLOGY</p><h2 id="method-dialog-title">详细计算方式</h2></div><button class="dialog-close" id="method-close" type="button" aria-label="关闭计算方式"><i data-lucide="x"></i></button></div>
+    <div class="formula-panel">
+      <p><b>基础样本分</b> = 大众点评分 × 45% ＋ 小红书分 × 45% ＋ 榜单补充分 × 10%</p>
+      <p><b>榜单补充分</b> = max（本地行业/媒体分，旅游/英文媒体分）</p>
+      <p><b>专业背书加分</b> = 专业/国际背书分 ÷ 100 × 10</p>
+      <p><b>最终样本分</b> = min（100，基础样本分 ＋ 专业背书加分）</p>
+    </div>
+    <div class="method-details">
+      <section><span>01</span><div><h3>来源内名次分</h3><code>（51 − 来源内排名）÷ 50 × 100</code><p>每个来源最多取前 50 名，第 1 名为 100 分，第 50 名为 2 分；未命中该来源记为 0 分。</p></div></section>
+      <section><span>02</span><div><h3>大众点评分</h3><code>搜索/排序分 × 80% ＋ 2025 酒吧指南分 × 10% ＋ 2026 必玩榜人气优先分 × 10%</code><p>搜索/排序分综合智能排序、好评排序、人气排序及评价最多排序等结果；重复出现用于提高点评内部排序稳定性。</p></div></section>
+      <section><span>03</span><div><h3>小红书分</h3><code>评论提及权重 = 1 ＋ ln（1 ＋ 评论点赞数）</code><code>热度分 = log（1 ＋ 点赞加权提及）÷ 全样本最大值 × 100</code><code>情绪分 = WilsonLowerBound（加权正向，加权正向 ＋ 加权负向）× 100</code><code>小红书综合分 = 热度分 × 60% ＋ 情绪分 × 40%</code><p>同时衡量传播声量和评价质量；高赞负向反馈会拉低分数，小样本全好评不会被过度放大。</p></div></section>
+      <section><span>04</span><div><h3>本地与旅游/英文来源</h3><p>成都本地行业媒体、城市榜单、Trip.com 及英文行业报道均先换算为来源内名次分。两类分数不相加，取较高者作为 10% 的榜单补充项，避免重复背书被放大。</p></div></section>
+      <section><span>05</span><div><h3>专业/国际背书</h3><p>Asia’s 50 Best 或橄榄中国三星为 100 分，橄榄中国二星 85 分，50 Best Discovery 80 分，橄榄中国一星 70 分，年度必喝 60 分；同店多项命中取最高值。</p></div></section>
+    </div>
+    <p class="dialog-note">该排名用于确定行业研究样本优先级和传播观察顺序，不代表个人口味，也不是消费决策的唯一依据。</p>
+  </dialog>
 
   <footer class="site-footer"><b>CHENGDU BAR STUDY</b><span>研究样本优先级不等于个人口味榜</span></footer>
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>

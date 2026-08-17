@@ -8,6 +8,7 @@ const searchInput=document.getElementById('search-input');
 const sortSelect=document.getElementById('sort-select');
 const descButton=document.getElementById('sort-desc');
 const ascButton=document.getElementById('sort-asc');
+const methodDialog=document.getElementById('method-dialog');
 
 function esc(value){return String(value??'').replace(/[&<>'"]/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]))}
 function valueFor(bar,key){return key==='average'?bar.average:bar.scores[key]}
@@ -37,6 +38,9 @@ searchInput.addEventListener('input',event=>{state.query=event.target.value;rend
 sortSelect.addEventListener('change',event=>setSort(event.target.value,state.direction));
 descButton.addEventListener('click',()=>setSort(state.sort,'desc'));ascButton.addEventListener('click',()=>setSort(state.sort,'asc'));
 document.querySelectorAll('[data-sort]').forEach(button=>button.addEventListener('click',()=>setSort(button.dataset.sort)));
+document.getElementById('method-button').addEventListener('click',()=>methodDialog.showModal());
+document.getElementById('method-close').addEventListener('click',()=>methodDialog.close());
+methodDialog.addEventListener('click',event=>{if(event.target===methodDialog)methodDialog.close()});
 
 document.getElementById('bar-count').textContent=bars.length;document.getElementById('link-count').textContent=bars.filter(bar=>bar.dianpingUrl).length;document.getElementById('area-count').textContent=new Set(bars.map(bar=>bar.areaKey)).size;
 renderRanking();
