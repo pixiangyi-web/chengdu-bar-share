@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="成都酒吧规则加权总榜与热力分布地图">
+  <title>成都酒吧研究总榜</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Serif+SC:wght@700;900&family=Oswald:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="返回顶部"><span>CHENGDU BAR STUDY</span><b>成都酒吧研究总榜</b></a>
+    <nav aria-label="页面导航"><a href="#ranking">总榜</a><a href="#distribution">热力地图</a></nav>
+  </header>
+
+  <main id="top">
+    <section class="intro" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">RULE-WEIGHTED RANKING · 2026</p>
+        <h1 id="page-title">成都酒吧<br>研究总榜</h1>
+      </div>
+      <div class="intro-meta">
+        <p>以大众点评、小红书、专业背书、本地榜单及旅游/英文媒体信息合并计算。</p>
+        <dl><div><dt>收录酒吧</dt><dd id="bar-count">152</dd></div><div><dt>可用点评链接</dt><dd id="link-count">148</dd></div><div><dt>覆盖商圈</dt><dd id="area-count">54</dd></div></dl>
+      </div>
+    </section>
+
+    <section class="ranking-section" id="ranking" aria-labelledby="ranking-title">
+      <div class="section-heading"><div><p class="section-index">01 / RANKING</p><h2 id="ranking-title">全部酒吧排名</h2></div><p id="ranking-status">按总得分从高到低</p></div>
+      <div class="toolbar" aria-label="排名控制">
+        <label class="search-field"><i data-lucide="search" aria-hidden="true"></i><span class="sr-only">搜索酒吧</span><input id="search-input" type="search" placeholder="搜索酒吧、商圈或类型"></label>
+        <label class="sort-field"><span>排序项</span><select id="sort-select"><option value="total">总得分</option><option value="professional">专业分</option><option value="dianping">大众点评分</option><option value="xhs">小红书分</option><option value="local">本地分</option><option value="travel">旅游/英文分</option><option value="average">人均</option></select></label>
+        <div class="direction-control" role="group" aria-label="排序方向"><button type="button" id="sort-desc" class="is-active" aria-pressed="true"><i data-lucide="arrow-down-wide-narrow"></i>降序</button><button type="button" id="sort-asc" aria-pressed="false"><i data-lucide="arrow-up-narrow-wide"></i>升序</button></div>
+      </div>
+
+      <div class="table-shell">
+        <table class="ranking-table">
+          <thead><tr>
+            <th class="rank-col">排名</th><th class="name-col">酒吧</th>
+            <th><button data-sort="total">总得分<i data-lucide="chevrons-up-down"></i></button></th>
+            <th><button data-sort="professional">专业<i data-lucide="chevrons-up-down"></i></button></th>
+            <th><button data-sort="dianping">大众<i data-lucide="chevrons-up-down"></i></button></th>
+            <th><button data-sort="xhs">红书<i data-lucide="chevrons-up-down"></i></button></th>
+            <th><button data-sort="local">本地<i data-lucide="chevrons-up-down"></i></button></th>
+            <th><button data-sort="travel">旅游/英文<i data-lucide="chevrons-up-down"></i></button></th>
+            <th><button data-sort="average">人均<i data-lucide="chevrons-up-down"></i></button></th>
+            <th>位置</th><th>类型</th><th class="feature-col">酒吧特色</th><th>大众点评</th>
+          </tr></thead>
+          <tbody id="ranking-body"></tbody>
+        </table>
+      </div>
+      <div id="mobile-ranking" class="mobile-ranking"></div>
+      <button class="expand-button" id="expand-button" type="button"><i data-lucide="chevron-down"></i><span>展开第 51–152 名</span></button>
+      <p class="empty-state" id="empty-state" hidden>没有找到符合条件的酒吧。</p>
+    </section>
+
+    <section class="map-section" id="distribution" aria-labelledby="map-title">
+      <div class="section-heading"><div><p class="section-index">02 / DISTRIBUTION</p><h2 id="map-title">成都酒吧热力分布</h2></div><p>缩放至街区或点击热区，查看片区酒吧</p></div>
+      <div class="map-layout">
+        <div class="map-frame"><div id="map" aria-label="成都酒吧热力地图"></div><div class="map-legend"><b>分布密度</b><span></span><small>分散</small><small>集中</small></div></div>
+        <aside class="district-panel" aria-live="polite">
+          <div class="district-heading"><div><p>当前街区</p><h3 id="district-name">九眼桥</h3></div><strong id="district-count">0 家</strong></div>
+          <p class="district-hint">地图放大后会自动选择距离中心最近的集聚街区，也可直接点击热区。</p>
+          <div id="district-list" class="district-list"></div>
+        </aside>
+      </div>
+      <p class="map-note">定位口径：依据榜单商圈与公开街道信息生成商圈级锚点；位置待补的门店不进入热力计算。地图用于行业分布观察，不作导航。</p>
+    </section>
+  </main>
+
+  <footer class="site-footer"><b>CHENGDU BAR STUDY</b><span>研究样本优先级不等于个人口味榜</span></footer>
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
