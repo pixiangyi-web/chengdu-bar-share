@@ -1,4 +1,4 @@
-# chengdubarshare
+# chengdu-bar-share
 
 成都酒吧规则加权总榜与热力分布网页。
 
