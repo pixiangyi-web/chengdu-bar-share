@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "chengdubar",
+  "pages_build_output_dir": ".",
+  "compatibility_date": "2026-08-20",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "chengdu-bar-guide",
+      "database_id": "2d86fa2c-9f3e-4a12-94e9-f7c1f1adb5ba"
+    }
+  ]
+}
