@@ -1,9 +1,10 @@
 const bars=window.BAR_DATA||[];
 const menuHighlights=window.MENU_HIGHLIGHTS||{};
-const state={sort:'total',direction:'desc',expanded:false,query:'',selectedArea:null,filters:{areas:new Set(),types:new Set(),budget:'',menu:false,features:new Set()}};
+const state={sort:'total',direction:'desc',expanded:false,query:'',selectedArea:null,filters:{areas:new Set(),bases:new Set(),formats:new Set(),budget:'',menu:false,features:new Set()}};
 const scoreLabels={total:'总得分',professional:'专业分',dianping:'大众点评分',xhs:'小红书分',local:'本地分',travel:'旅游/英文分',average:'人均'};
 const filterFeatures=['室内禁烟/无烟区','安静聊天','佐酒小食口碑好','可按口味定制','主题酒单','威士忌选择','精酿选择','现场音乐','露台/屋顶','宠物友好'];
-const filterTypes=[['cocktail','鸡尾酒'],['whisky','威士忌'],['wine','葡萄酒'],['craft','精酿啤酒'],['dining','餐酒吧'],['music','音乐 / Live'],['party','派对 / 综合']];
+const filterBases=[['cocktail','鸡尾酒'],['whisky','威士忌'],['wine','葡萄酒'],['craft','精酿啤酒']];
+const filterFormats=[['dining','餐酒吧'],['music','音乐 / Live'],['party','派对 / 综合']];
 const tagCatalog=['室内禁烟/无烟区','可吸烟/烟味明显','安静聊天','适合独饮','适合约会','朋友聚会','佐酒小食口碑好','正餐表现突出','可按口味定制','经典鸡尾酒强','低度友好','无酒精选择','威士忌选择','葡萄酒酒单','精酿选择','现场音乐','DJ/派对','露台/屋顶','宠物友好','桌游/互动','热门时段建议预约','隐藏式入口','拍照表现突出','服务口碑突出','性价比突出','交通便利','深夜营业'];
 const body=document.getElementById('ranking-body');
 const mobile=document.getElementById('mobile-ranking');
@@ -27,10 +28,10 @@ function tagsHtml(features,limit=7){return `<div class="feature-list">${features
 function tagButton(bar){return `<button class="tag-button" type="button" data-tag-bar="${bar.rank}"><i data-lucide="tag"></i>建议标签</button>`}
 function featuresHtml(bar,limit=7){return `${tagsHtml(bar.features,limit)}${tagButton(bar)}`}
 function signatureHtml(bar){const item=menuHighlights[bar.name];return item?`<div class="signature-drink"><b>${esc(item.name)}</b><span>${esc(item.flavor)}</span></div>`:'<span class="signature-missing">暂无可靠酒单条目</span>'}
-function typeGroup(type){if(/葡萄酒|红酒/.test(type))return'wine';if(/精酿/.test(type))return'craft';if(/Live|音乐|民谣/.test(type))return'music';if(/餐酒吧/.test(type))return'dining';if(/威士忌/.test(type))return'whisky';if(/鸡尾酒/.test(type))return'cocktail';return'party'}
+function typeTags(bar){const text=`${bar.type} ${bar.features.join(' ')}`,tags=new Set();if(/鸡尾酒/.test(bar.type))tags.add('cocktail');if(/威士忌/.test(bar.type))tags.add('whisky');if(/葡萄酒|红酒/.test(bar.type))tags.add('wine');if(/精酿/.test(bar.type))tags.add('craft');if(/餐酒吧|餐吧|酒食|restaurant/i.test(bar.type))tags.add('dining');if(/Live|音乐|民谣|现场演出/i.test(text))tags.add('music');if(/派对|夜店|Club|DJ|综合清吧/i.test(text))tags.add('party');return tags}
 function budgetMatch(value,budget){if(!budget)return true;if(value==null)return false;if(budget==='80')return value<=80;if(budget==='120')return value>80&&value<=120;if(budget==='160')return value>120&&value<=160;return value>160}
-function hasActiveFilters(){const f=state.filters;return Boolean(f.areas.size||f.types.size||f.budget||f.menu||f.features.size)}
-function matchesFilters(bar){const f=state.filters;return(!f.areas.size||f.areas.has(bar.areaKey))&&(!f.types.size||f.types.has(typeGroup(bar.type)))&&budgetMatch(bar.average,f.budget)&&(!f.menu||menuHighlights[bar.name])&&[...f.features].every(feature=>bar.features.includes(feature))}
+function hasActiveFilters(){const f=state.filters;return Boolean(f.areas.size||f.bases.size||f.formats.size||f.budget||f.menu||f.features.size)}
+function matchesFilters(bar){const f=state.filters,barTypes=typeTags(bar);return(!f.areas.size||f.areas.has(bar.areaKey))&&(!f.bases.size||[...f.bases].some(type=>barTypes.has(type)))&&(!f.formats.size||[...f.formats].some(type=>barTypes.has(type)))&&budgetMatch(bar.average,f.budget)&&(!f.menu||menuHighlights[bar.name])&&[...f.features].every(feature=>bar.features.includes(feature))}
 function sortedBars(){
   const query=state.query.trim().toLowerCase();
   const filtered=bars.filter(bar=>matchesFilters(bar)&&(!query||[bar.name,bar.type,bar.area,...bar.features,menuHighlights[bar.name]?.name,menuHighlights[bar.name]?.flavor].join(' ').toLowerCase().includes(query)));
@@ -48,7 +49,7 @@ function renderRanking(){
   document.getElementById('ranking-status').textContent=`按${scoreLabels[state.sort]}${state.direction==='desc'?'从高到低':'从低到高'} · 显示 ${shown.length}/${all.length}`;
   document.getElementById('filter-count').textContent=hasActiveFilters()?`筛出 ${all.length} 家`:`全部 ${bars.length} 家`;
   document.getElementById('filter-reset').disabled=!hasActiveFilters();
-  updateMultiFilterLabel('area',state.filters.areas,'全部商圈');updateMultiFilterLabel('type',state.filters.types,'全部类型');
+  updateMultiFilterLabel('area',state.filters.areas,'全部商圈');updateMultiFilterLabel('base',state.filters.bases,'全部酒类',filterBases);updateMultiFilterLabel('format',state.filters.formats,'全部形态',filterFormats);
   sortSelect.value=state.sort;descButton.classList.toggle('is-active',state.direction==='desc');ascButton.classList.toggle('is-active',state.direction==='asc');descButton.setAttribute('aria-pressed',state.direction==='desc');ascButton.setAttribute('aria-pressed',state.direction==='asc');
   lucide.createIcons({attrs:{'stroke-width':1.8}});
 }
@@ -61,14 +62,15 @@ document.querySelectorAll('[data-sort]').forEach(button=>button.addEventListener
 const budgetFilter=document.getElementById('filter-budget'),menuFilter=document.getElementById('filter-menu');
 const areas=[...new Set(bars.filter(bar=>bar.areaKey&&bar.areaKey!=='待补').map(bar=>bar.areaKey))].sort((a,b)=>a.localeCompare(b,'zh-CN'));
 document.getElementById('filter-area-options').innerHTML=areas.map(area=>`<label><input type="checkbox" value="${esc(area)}"><span>${esc(area)}</span></label>`).join('');
-document.getElementById('filter-type-options').innerHTML=filterTypes.map(([value,label])=>`<label><input type="checkbox" value="${value}"><span>${label}</span></label>`).join('');
+document.getElementById('filter-base-options').innerHTML=filterBases.map(([value,label])=>`<label><input type="checkbox" value="${value}"><span>${label}</span></label>`).join('');
+document.getElementById('filter-format-options').innerHTML=filterFormats.map(([value,label])=>`<label><input type="checkbox" value="${value}"><span>${label}</span></label>`).join('');
 document.getElementById('feature-filter-list').innerHTML=filterFeatures.map(feature=>`<label><input type="checkbox" value="${esc(feature)}"><span>${esc(feature)}</span></label>`).join('');
-function updateMultiFilterLabel(key,values,fallback){const label=document.getElementById(`filter-${key}-label`),value=[...values][0];label.textContent=values.size===0?fallback:values.size===1?(key==='type'?filterTypes.find(item=>item[0]===value)?.[1]:value):`已选 ${values.size} 项`}
+function updateMultiFilterLabel(key,values,fallback,options){const label=document.getElementById(`filter-${key}-label`),value=[...values][0];label.textContent=values.size===0?fallback:values.size===1?(options?options.find(item=>item[0]===value)?.[1]:value):`已选 ${values.size} 项`}
 function bindMultiFilter(key,stateKey){document.getElementById(`filter-${key}-options`).addEventListener('change',event=>{event.target.checked?state.filters[stateKey].add(event.target.value):state.filters[stateKey].delete(event.target.value);renderRanking()})}
-bindMultiFilter('area','areas');bindMultiFilter('type','types');budgetFilter.addEventListener('change',event=>{state.filters.budget=event.target.value;renderRanking()});menuFilter.addEventListener('change',event=>{state.filters.menu=event.target.checked;renderRanking()});
+bindMultiFilter('area','areas');bindMultiFilter('base','bases');bindMultiFilter('format','formats');budgetFilter.addEventListener('change',event=>{state.filters.budget=event.target.value;renderRanking()});menuFilter.addEventListener('change',event=>{state.filters.menu=event.target.checked;renderRanking()});
 document.addEventListener('click',event=>document.querySelectorAll('.multi-filter details[open]').forEach(details=>{if(!details.contains(event.target))details.removeAttribute('open')}));
 document.getElementById('feature-filter-list').addEventListener('change',event=>{event.target.checked?state.filters.features.add(event.target.value):state.filters.features.delete(event.target.value);renderRanking()});
-document.getElementById('filter-reset').addEventListener('click',()=>{state.filters={areas:new Set(),types:new Set(),budget:'',menu:false,features:new Set()};budgetFilter.value='';menuFilter.checked=false;document.querySelectorAll('#filter-area-options input,#filter-type-options input,#feature-filter-list input').forEach(input=>input.checked=false);renderRanking()});
+document.getElementById('filter-reset').addEventListener('click',()=>{state.filters={areas:new Set(),bases:new Set(),formats:new Set(),budget:'',menu:false,features:new Set()};budgetFilter.value='';menuFilter.checked=false;document.querySelectorAll('#filter-area-options input,#filter-base-options input,#filter-format-options input,#feature-filter-list input').forEach(input=>input.checked=false);renderRanking()});
 document.getElementById('method-button').addEventListener('click',()=>methodDialog.showModal());
 document.getElementById('method-close').addEventListener('click',()=>methodDialog.close());
 methodDialog.addEventListener('click',event=>{if(event.target===methodDialog)methodDialog.close()});
