@@ -1,5 +1,6 @@
 const bars=window.BAR_DATA||[];
 const menuHighlights=window.MENU_HIGHLIGHTS||{};
+const menuTypeEvidence=window.MENU_TYPE_EVIDENCE||{};
 const state={sort:'total',direction:'desc',expanded:false,query:'',selectedArea:null,filters:{areas:new Set(),bases:new Set(),formats:new Set(),budget:'',menu:false,features:new Set()}};
 const scoreLabels={total:'总得分',professional:'专业分',dianping:'大众点评分',xhs:'小红书分',local:'本地分',travel:'旅游/英文分',average:'人均'};
 const filterFeatures=['室内禁烟/无烟区','安静聊天','佐酒小食口碑好','可按口味定制','主题酒单','威士忌选择','精酿选择','现场音乐','露台/屋顶','宠物友好'];
@@ -28,7 +29,7 @@ function tagsHtml(features,limit=7){return `<div class="feature-list">${features
 function tagButton(bar){return `<button class="tag-button" type="button" data-tag-bar="${bar.rank}"><i data-lucide="tag"></i>建议标签</button>`}
 function featuresHtml(bar,limit=7){return `${tagsHtml(bar.features,limit)}${tagButton(bar)}`}
 function signatureHtml(bar){const item=menuHighlights[bar.name];return item?`<div class="signature-drink"><b>${esc(item.name)}</b><span>${esc(item.flavor)}</span></div>`:'<span class="signature-missing">暂无可靠酒单条目</span>'}
-function typeTags(bar){const text=`${bar.type} ${bar.features.join(' ')}`,tags=new Set();if(/鸡尾酒/.test(bar.type))tags.add('cocktail');if(/威士忌/.test(bar.type))tags.add('whisky');if(/葡萄酒|红酒/.test(bar.type))tags.add('wine');if(/精酿/.test(bar.type))tags.add('craft');if(/餐酒吧|餐吧|酒食|restaurant/i.test(bar.type))tags.add('dining');if(/Live|音乐|民谣|现场演出/i.test(text))tags.add('music');if(/派对|夜店|Club|DJ|综合清吧/i.test(text))tags.add('party');return tags}
+function typeTags(bar){const text=`${bar.type} ${bar.features.join(' ')}`,tags=new Set(menuTypeEvidence[bar.name]||[]);if(/鸡尾酒/.test(bar.type))tags.add('cocktail');if(/威士忌/.test(bar.type))tags.add('whisky');if(/葡萄酒|红酒/.test(bar.type))tags.add('wine');if(/精酿/.test(bar.type))tags.add('craft');if(/餐酒吧|餐吧|酒食|restaurant/i.test(bar.type))tags.add('dining');if(/Live|音乐|民谣|现场演出/i.test(text))tags.add('music');if(/派对|夜店|Club|DJ|综合清吧/i.test(text))tags.add('party');return tags}
 function budgetMatch(value,budget){if(!budget)return true;if(value==null)return false;if(budget==='80')return value<=80;if(budget==='120')return value>80&&value<=120;if(budget==='160')return value>120&&value<=160;return value>160}
 function hasActiveFilters(){const f=state.filters;return Boolean(f.areas.size||f.bases.size||f.formats.size||f.budget||f.menu||f.features.size)}
 function matchesFilters(bar){const f=state.filters,barTypes=typeTags(bar);return(!f.areas.size||f.areas.has(bar.areaKey))&&(!f.bases.size||[...f.bases].some(type=>barTypes.has(type)))&&(!f.formats.size||[...f.formats].some(type=>barTypes.has(type)))&&budgetMatch(bar.average,f.budget)&&(!f.menu||menuHighlights[bar.name])&&[...f.features].every(feature=>bar.features.includes(feature))}
