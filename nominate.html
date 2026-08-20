@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="提名尚未进入成都酒吧研究总榜的酒吧">
+  <title>提名酒吧 · 成都酒吧研究总榜</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Serif+SC:wght@700;900&family=Oswald:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="feedback.css">
+</head>
+<body>
+  <header class="site-header"><a class="brand" href="index.html"><span>CHENGDU BAR STUDY</span><b>成都酒吧研究总榜</b></a><nav aria-label="页面导航"><a href="index.html#ranking">总榜</a><a href="index.html#distribution">热力地图</a><a href="nominate.html" aria-current="page">提名酒吧</a></nav></header>
+  <main class="nominate-main">
+    <section class="nominate-heading"><p class="eyebrow">NOMINATE A BAR</p><h1>提名未上榜酒吧</h1><p>告诉我们遗漏了哪家成都酒吧。提名会进入候选池，经资料核实后再决定是否纳入后续研究，不会直接改变现有榜单。</p></section>
+    <form class="nominate-form" id="nominate-form">
+      <label>酒吧名称 *<input name="bar_name" required maxlength="80" autocomplete="organization"></label>
+      <label>所在区域 / 商圈 *<input name="area" required maxlength="80" placeholder="例如：玉林 / 九眼桥"></label>
+      <label>酒吧类型<select name="bar_type"><option value="">暂不确定</option><option>鸡尾酒吧</option><option>威士忌吧</option><option>葡萄酒吧</option><option>精酿酒吧</option><option>餐酒吧</option><option>音乐酒吧 / Live House</option><option>派对酒廊</option><option>酒店酒吧</option><option>其他</option></select></label>
+      <label>大众点评或店铺链接<input name="source_url" type="url" maxlength="500" placeholder="https://..."></label>
+      <label class="full">推荐理由 *<textarea name="reason" required maxlength="500" placeholder="它为什么值得进入候选池？可以写酒水、主理人、空间、服务或独特定位。"></textarea></label>
+      <label class="website-field" aria-hidden="true">网站<input name="website" tabindex="-1" autocomplete="off"></label>
+      <p class="nominate-note">提交仅用于榜单候选核实。请勿填写手机号、微信等个人信息。</p>
+      <button class="nominate-submit" id="nominate-submit" type="submit">提交提名</button>
+      <p class="nominate-message" id="nominate-message" role="status"></p>
+    </form>
+  </main>
+  <footer class="site-footer"><b>CHENGDU BAR STUDY</b><span>候选提名不等于正式入榜</span></footer>
+  <script src="nominate.js"></script>
+</body>
+</html>

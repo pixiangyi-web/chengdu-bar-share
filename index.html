@@ -10,11 +10,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Serif+SC:wght@700;900&family=Oswald:wght@500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="feedback.css">
 </head>
 <body>
   <header class="site-header">
     <a class="brand" href="#top" aria-label="返回顶部"><span>CHENGDU BAR STUDY</span><b>成都酒吧研究总榜</b></a>
-    <nav aria-label="页面导航"><a href="#ranking">总榜</a><a href="#distribution">热力地图</a></nav>
+    <nav aria-label="页面导航"><a href="#ranking">总榜</a><a href="#distribution">热力地图</a><a href="nominate.html">提名酒吧</a></nav>
   </header>
 
   <main id="top">
@@ -89,6 +90,30 @@
       <section><span>05</span><div><h3>专业/国际背书</h3><p>Asia’s 50 Best 或橄榄中国三星为 100 分，橄榄中国二星 85 分，50 Best Discovery 80 分，橄榄中国一星 70 分，年度必喝 60 分；同店多项命中取最高值。</p></div></section>
     </div>
     <p class="dialog-note">该排名用于确定行业研究样本优先级和传播观察顺序，不代表个人口味，也不是消费决策的唯一依据。</p>
+  </dialog>
+
+  <dialog class="rating-dialog" id="rating-dialog" aria-labelledby="rating-title">
+    <div class="rating-head"><div><p class="section-index">COMMUNITY RATING</p><h2 id="rating-title">站内评分</h2><p id="rating-bar-name"></p></div><button class="dialog-close" id="rating-close" type="button" aria-label="关闭评分"><i data-lucide="x"></i></button></div>
+    <form id="rating-form">
+      <section class="rating-step" id="rating-scores">
+        <p class="rating-intro">请按你的实际体验评分。站内数据单独统计，暂不改变研究总榜。</p>
+        <div id="rating-summary" class="rating-summary" hidden></div>
+        <div class="rating-grid"></div>
+        <button class="rating-next" id="rating-next" type="button" disabled>下一步：判断当前排名<i data-lucide="arrow-right"></i></button>
+      </section>
+      <section class="rating-step" id="rating-opinion" hidden>
+        <button class="rating-back" id="rating-back" type="button"><i data-lucide="arrow-left"></i>返回修改评分</button>
+        <h3>你认为这家酒吧当前排名如何？</h3>
+        <p id="rating-rank-context"></p>
+        <div class="opinion-options" role="radiogroup" aria-label="当前排名判断">
+          <button type="button" data-opinion="high" role="radio" aria-checked="false">偏高</button>
+          <button type="button" data-opinion="fair" role="radio" aria-checked="false">适当</button>
+          <button type="button" data-opinion="low" role="radio" aria-checked="false">偏低</button>
+        </div>
+        <button class="rating-submit" id="rating-submit" type="submit" disabled>提交评价</button>
+      </section>
+      <p class="rating-message" id="rating-message" role="status"></p>
+    </form>
   </dialog>
 
   <footer class="site-footer"><b>CHENGDU BAR STUDY</b><span>研究样本优先级不等于个人口味榜</span></footer>
