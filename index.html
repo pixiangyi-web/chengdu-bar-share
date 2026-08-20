@@ -26,6 +26,7 @@
       </div>
       <div class="intro-meta">
         <p>以大众点评、小红书、专业背书、本地榜单及旅游/英文媒体信息合并计算。</p>
+        <div class="data-update"><i data-lucide="calendar-clock"></i><span>数据更新至 <b>2026 年 8 月 13 日</b></span></div>
         <button class="method-button" id="method-button" type="button" style="margin-bottom:30px"><i data-lucide="calculator"></i>详细计算方式</button>
         <dl><div><dt>收录酒吧</dt><dd id="bar-count">152</dd></div><div><dt>可用点评链接</dt><dd id="link-count">148</dd></div><div><dt>覆盖商圈</dt><dd id="area-count">54</dd></div></dl>
       </div>
@@ -50,7 +51,7 @@
             <th><button data-sort="local">本地<i data-lucide="chevrons-up-down"></i></button></th>
             <th><button data-sort="travel">旅游/英文<i data-lucide="chevrons-up-down"></i></button></th>
             <th><button data-sort="average">人均<i data-lucide="chevrons-up-down"></i></button></th>
-            <th>位置</th><th>类型</th><th class="feature-col">酒吧特色</th><th>大众点评</th>
+            <th>位置</th><th>类型</th><th class="signature-col">代表特调</th><th class="feature-col">酒吧特色</th><th>大众点评</th>
           </tr></thead>
           <tbody id="ranking-body"></tbody>
         </table>
@@ -121,6 +122,7 @@
   <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
   <script src="data.js"></script>
+  <script src="menu-highlights.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
