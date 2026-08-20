@@ -35,10 +35,20 @@
     <section class="ranking-section" id="ranking" aria-labelledby="ranking-title">
       <div class="section-heading"><div><p class="section-index">01 / RANKING</p><h2 id="ranking-title">全部酒吧排名</h2></div><p id="ranking-status">按总得分从高到低</p></div>
       <div class="toolbar" aria-label="排名控制">
-        <label class="search-field"><i data-lucide="search" aria-hidden="true"></i><span class="sr-only">搜索酒吧</span><input id="search-input" type="search" placeholder="搜索酒吧、商圈或类型"></label>
+        <label class="search-field"><i data-lucide="search" aria-hidden="true"></i><span class="sr-only">搜索酒吧</span><input id="search-input" type="search" placeholder="搜索酒吧、商圈、类型或特调"></label>
         <label class="sort-field"><span>排序项</span><select id="sort-select"><option value="total">总得分</option><option value="professional">专业分</option><option value="dianping">大众点评分</option><option value="xhs">小红书分</option><option value="local">本地分</option><option value="travel">旅游/英文分</option><option value="average">人均</option></select></label>
         <div class="direction-control" role="group" aria-label="排序方向"><button type="button" id="sort-desc" class="is-active" aria-pressed="true"><i data-lucide="arrow-down-wide-narrow"></i>降序</button><button type="button" id="sort-asc" aria-pressed="false"><i data-lucide="arrow-up-narrow-wide"></i>升序</button></div>
       </div>
+      <section class="filter-panel" aria-label="酒吧筛选器">
+        <div class="filter-head"><div><i data-lucide="sliders-horizontal"></i><b>筛选酒吧</b><span id="filter-count">全部 152 家</span></div><button id="filter-reset" type="button" disabled><i data-lucide="rotate-ccw"></i>清空筛选</button></div>
+        <div class="filter-selects">
+          <label><span>商圈</span><select id="filter-area"><option value="">全部商圈</option></select></label>
+          <label><span>类型</span><select id="filter-type"><option value="">全部类型</option><option value="cocktail">鸡尾酒</option><option value="whisky">威士忌</option><option value="wine">葡萄酒</option><option value="craft">精酿啤酒</option><option value="dining">餐酒吧</option><option value="music">音乐 / Live</option><option value="party">派对 / 综合</option></select></label>
+          <label><span>人均预算</span><select id="filter-budget"><option value="">不限预算</option><option value="80">¥80 以内</option><option value="120">¥81–120</option><option value="160">¥121–160</option><option value="161">¥161 以上</option></select></label>
+          <label class="menu-toggle"><input id="filter-menu" type="checkbox"><span><i data-lucide="martini"></i>有代表特调</span></label>
+        </div>
+        <div class="feature-filters"><span>酒吧特色</span><div id="feature-filter-list"></div></div>
+      </section>
 
       <div class="table-shell">
         <table class="ranking-table">

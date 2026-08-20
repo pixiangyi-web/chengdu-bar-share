@@ -1,7 +1,8 @@
 const bars=window.BAR_DATA||[];
 const menuHighlights=window.MENU_HIGHLIGHTS||{};
-const state={sort:'total',direction:'desc',expanded:false,query:'',selectedArea:null};
+const state={sort:'total',direction:'desc',expanded:false,query:'',selectedArea:null,filters:{area:'',type:'',budget:'',menu:false,features:new Set()}};
 const scoreLabels={total:'总得分',professional:'专业分',dianping:'大众点评分',xhs:'小红书分',local:'本地分',travel:'旅游/英文分',average:'人均'};
+const filterFeatures=['室内禁烟/无烟区','安静聊天','佐酒小食口碑好','可按口味定制','主题酒单','威士忌选择','精酿选择','现场音乐','露台/屋顶','宠物友好'];
 const body=document.getElementById('ranking-body');
 const mobile=document.getElementById('mobile-ranking');
 const expandButton=document.getElementById('expand-button');
@@ -20,21 +21,27 @@ function formatScore(value){return value==null?'—':Number(value).toFixed(1).re
 function formatMoney(value){return value==null?'—':`¥${Math.round(value)}`}
 function tagsHtml(features,limit=7){return `<div class="feature-list">${features.slice(0,limit).map(tag=>`<span class="feature-tag ${/烟/.test(tag)?'smoke':''}">${esc(tag)}</span>`).join('')}</div>`}
 function signatureHtml(bar){const item=menuHighlights[bar.name];return item?`<div class="signature-drink"><b>${esc(item.name)}</b><span>${esc(item.flavor)}</span></div>`:'<span class="signature-missing">暂无可靠酒单条目</span>'}
+function typeGroup(type){if(/葡萄酒|红酒/.test(type))return'wine';if(/精酿/.test(type))return'craft';if(/Live|音乐|民谣/.test(type))return'music';if(/餐酒吧/.test(type))return'dining';if(/威士忌/.test(type))return'whisky';if(/鸡尾酒/.test(type))return'cocktail';return'party'}
+function budgetMatch(value,budget){if(!budget)return true;if(value==null)return false;if(budget==='80')return value<=80;if(budget==='120')return value>80&&value<=120;if(budget==='160')return value>120&&value<=160;return value>160}
+function hasActiveFilters(){const f=state.filters;return Boolean(f.area||f.type||f.budget||f.menu||f.features.size)}
+function matchesFilters(bar){const f=state.filters;return(!f.area||bar.areaKey===f.area)&&(!f.type||typeGroup(bar.type)===f.type)&&budgetMatch(bar.average,f.budget)&&(!f.menu||menuHighlights[bar.name])&&[...f.features].every(feature=>bar.features.includes(feature))}
 function sortedBars(){
   const query=state.query.trim().toLowerCase();
-  const filtered=query?bars.filter(bar=>[bar.name,bar.type,bar.area,...bar.features].join(' ').toLowerCase().includes(query)):bars.slice();
+  const filtered=bars.filter(bar=>matchesFilters(bar)&&(!query||[bar.name,bar.type,bar.area,...bar.features,menuHighlights[bar.name]?.name,menuHighlights[bar.name]?.flavor].join(' ').toLowerCase().includes(query)));
   return filtered.sort((a,b)=>{const av=valueFor(a,state.sort),bv=valueFor(b,state.sort);if(av==null&&bv==null)return a.rank-b.rank;if(av==null)return 1;if(bv==null)return-1;const delta=av-bv;return state.direction==='asc'?delta||a.rank-b.rank:-delta||a.rank-b.rank});
 }
 function rateButton(bar){return `<button class="rate-button" type="button" data-rate="${bar.rank}"><i data-lucide="star"></i>站内评分</button>`}
 function tableRow(bar){const scores=['total','professional','dianping','xhs','local','travel'].map((key,index)=>`<td class="${index===0?'score-total':''} ${bar.scores[key]==null?'muted-score':''}">${formatScore(bar.scores[key])}</td>`).join('');return `<tr><td class="rank-col"><span class="rank-number">${bar.rank}</span></td><td><div class="bar-name">${esc(bar.name)}</div>${rateButton(bar)}</td>${scores}<td class="money">${formatMoney(bar.average)}</td><td class="location">${esc(bar.area)}</td><td class="bar-type">${esc(bar.type)}</td><td>${signatureHtml(bar)}</td><td>${tagsHtml(bar.features)}</td><td>${bar.dianpingUrl?`<a class="dp-link" href="${esc(bar.dianpingUrl)}" target="_blank" rel="noopener" aria-label="打开${esc(bar.name)}的大众点评"><i data-lucide="external-link"></i></a>`:'<span class="no-link">—</span>'}</td></tr>`}
 function mobileCard(bar){return `<article class="mobile-card"><div class="mobile-card-head"><span class="mobile-rank">${bar.rank}</span><h3>${esc(bar.name)}</h3><b class="mobile-total">${formatScore(bar.scores.total)}</b></div><div class="mobile-meta"><span>${formatMoney(bar.average)}</span><span>${esc(bar.type)}</span><span>${esc(bar.area)}</span>${bar.dianpingUrl?`<a href="${esc(bar.dianpingUrl)}" target="_blank" rel="noopener">大众点评 ↗</a>`:''}</div><div class="mobile-signature"><small>代表特调</small>${signatureHtml(bar)}</div><div class="mobile-scores">${['professional','dianping','xhs','local','travel'].map(key=>`<span>${formatScore(bar.scores[key])}<small>${scoreLabels[key].replace('分','')}</small></span>`).join('')}</div>${tagsHtml(bar.features,5)}${rateButton(bar)}</article>`}
 function renderRanking(){
-  const all=sortedBars();const searching=Boolean(state.query.trim());const shown=(state.expanded||searching)?all:all.slice(0,50);
+  const all=sortedBars();const filtering=Boolean(state.query.trim())||hasActiveFilters();const shown=(state.expanded||filtering)?all:all.slice(0,50);
   body.innerHTML=shown.map(tableRow).join('');mobile.innerHTML=shown.map(mobileCard).join('');
   document.getElementById('empty-state').hidden=shown.length>0;
-  expandButton.hidden=searching||all.length<=50;
+  expandButton.hidden=filtering||all.length<=50;
   expandButton.innerHTML=state.expanded?'<i data-lucide="chevron-up"></i><span>收起，仅显示前 50 条</span>':`<i data-lucide="chevron-down"></i><span>展开第 51–${all.length} 条</span>`;
   document.getElementById('ranking-status').textContent=`按${scoreLabels[state.sort]}${state.direction==='desc'?'从高到低':'从低到高'} · 显示 ${shown.length}/${all.length}`;
+  document.getElementById('filter-count').textContent=hasActiveFilters()?`筛出 ${all.length} 家`:`全部 ${bars.length} 家`;
+  document.getElementById('filter-reset').disabled=!hasActiveFilters();
   sortSelect.value=state.sort;descButton.classList.toggle('is-active',state.direction==='desc');ascButton.classList.toggle('is-active',state.direction==='asc');descButton.setAttribute('aria-pressed',state.direction==='desc');ascButton.setAttribute('aria-pressed',state.direction==='asc');
   lucide.createIcons({attrs:{'stroke-width':1.8}});
 }
@@ -44,6 +51,12 @@ searchInput.addEventListener('input',event=>{state.query=event.target.value;rend
 sortSelect.addEventListener('change',event=>setSort(event.target.value,state.direction));
 descButton.addEventListener('click',()=>setSort(state.sort,'desc'));ascButton.addEventListener('click',()=>setSort(state.sort,'asc'));
 document.querySelectorAll('[data-sort]').forEach(button=>button.addEventListener('click',()=>setSort(button.dataset.sort)));
+const areaFilter=document.getElementById('filter-area'),typeFilter=document.getElementById('filter-type'),budgetFilter=document.getElementById('filter-budget'),menuFilter=document.getElementById('filter-menu');
+[...new Set(bars.filter(bar=>bar.areaKey&&bar.areaKey!=='待补').map(bar=>bar.areaKey))].sort((a,b)=>a.localeCompare(b,'zh-CN')).forEach(area=>areaFilter.add(new Option(area,area)));
+document.getElementById('feature-filter-list').innerHTML=filterFeatures.map(feature=>`<label><input type="checkbox" value="${esc(feature)}"><span>${esc(feature)}</span></label>`).join('');
+areaFilter.addEventListener('change',event=>{state.filters.area=event.target.value;renderRanking()});typeFilter.addEventListener('change',event=>{state.filters.type=event.target.value;renderRanking()});budgetFilter.addEventListener('change',event=>{state.filters.budget=event.target.value;renderRanking()});menuFilter.addEventListener('change',event=>{state.filters.menu=event.target.checked;renderRanking()});
+document.getElementById('feature-filter-list').addEventListener('change',event=>{event.target.checked?state.filters.features.add(event.target.value):state.filters.features.delete(event.target.value);renderRanking()});
+document.getElementById('filter-reset').addEventListener('click',()=>{state.filters={area:'',type:'',budget:'',menu:false,features:new Set()};areaFilter.value='';typeFilter.value='';budgetFilter.value='';menuFilter.checked=false;document.querySelectorAll('#feature-filter-list input').forEach(input=>input.checked=false);renderRanking()});
 document.getElementById('method-button').addEventListener('click',()=>methodDialog.showModal());
 document.getElementById('method-close').addEventListener('click',()=>methodDialog.close());
 methodDialog.addEventListener('click',event=>{if(event.target===methodDialog)methodDialog.close()});
