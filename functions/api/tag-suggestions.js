@@ -15,7 +15,7 @@ export async function onRequestPost({request,env}){
   if(body.website)return json({ok:true});
   const barName=String(body.bar_name||"").trim().slice(0,80),note=String(body.note||"").trim().slice(0,500),device=String(body.device_hash||"").trim().slice(0,64);
   const tags=[...new Set((Array.isArray(body.tags)?body.tags:[]).map(tag=>String(tag).trim().slice(0,24)).filter(Boolean))].slice(0,5);
-  if(!barName||!tags.length||note.length<5||!/^[a-f0-9]{64}$/.test(device))return json({error:"请选择标签并简要说明依据"},400);
+  if(!barName||!tags.length||!/^[a-f0-9]{64}$/.test(device))return json({error:"请至少选择或填写一个标签"},400);
   await env.DB.prepare(`INSERT INTO bar_tag_suggestions (bar_name,suggested_tags,note,device_hash) VALUES (?,?,?,?) ON CONFLICT(bar_name,device_hash) DO UPDATE SET suggested_tags=excluded.suggested_tags,note=excluded.note,status='pending',reviewed_at=NULL,created_at=CURRENT_TIMESTAMP`).bind(barName,JSON.stringify(tags),note,device).run();
   return json({ok:true});
 }
