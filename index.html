@@ -42,8 +42,8 @@
       <section class="filter-panel" aria-label="酒吧筛选器">
         <div class="filter-head"><div><i data-lucide="sliders-horizontal"></i><b>筛选酒吧</b><span id="filter-count">全部 152 家</span></div><button id="filter-reset" type="button" disabled><i data-lucide="rotate-ccw"></i>清空筛选</button></div>
         <div class="filter-selects">
-          <label><span>商圈</span><select id="filter-area"><option value="">全部商圈</option></select></label>
-          <label><span>类型</span><select id="filter-type"><option value="">全部类型</option><option value="cocktail">鸡尾酒</option><option value="whisky">威士忌</option><option value="wine">葡萄酒</option><option value="craft">精酿啤酒</option><option value="dining">餐酒吧</option><option value="music">音乐 / Live</option><option value="party">派对 / 综合</option></select></label>
+          <div class="multi-filter"><span>商圈</span><details id="filter-area"><summary><span id="filter-area-label">全部商圈</span><i data-lucide="chevron-down"></i></summary><div class="multi-options" id="filter-area-options"></div></details></div>
+          <div class="multi-filter"><span>类型</span><details id="filter-type"><summary><span id="filter-type-label">全部类型</span><i data-lucide="chevron-down"></i></summary><div class="multi-options" id="filter-type-options"></div></details></div>
           <label><span>人均预算</span><select id="filter-budget"><option value="">不限预算</option><option value="80">¥80 以内</option><option value="120">¥81–120</option><option value="160">¥121–160</option><option value="161">¥161 以上</option></select></label>
           <label class="menu-toggle"><input id="filter-menu" type="checkbox"><span><i data-lucide="martini"></i>有代表特调</span></label>
         </div>
