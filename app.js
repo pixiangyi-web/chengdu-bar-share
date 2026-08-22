@@ -18,6 +18,7 @@ const methodDialog=document.getElementById('method-dialog');
 const ratingDialog=document.getElementById('rating-dialog');
 const tagDialog=document.getElementById('tag-dialog');
 const ratingState={bar:null,scores:{},opinion:null};
+let ratingSummaryRequest=0;
 const tagState={bar:null};
 const ratingDimensions=[['classic','经典'],['special','特调'],['environment','环境'],['service','服务'],['value','性价比']];
 
@@ -96,8 +97,8 @@ function updateRatingControls(){
   document.getElementById('rating-submit').disabled=!ratingState.opinion;
 }
 async function loadRatingSummary(bar){
-  const box=document.getElementById('rating-summary');box.hidden=true;
-  try{const response=await fetch(`/api/feedback?bar_id=${encodeURIComponent(bar.name)}`);if(!response.ok)return;const data=await response.json();if(!data.count)return;box.innerHTML=`<b>${data.count} 人已评分</b><span>经典 ${data.averages.classic} · 特调 ${data.averages.special} · 环境 ${data.averages.environment} · 服务 ${data.averages.service} · 性价比 ${data.averages.value}</span>`;box.hidden=false}catch{}
+  const box=document.getElementById('rating-summary'),requestId=++ratingSummaryRequest;box.hidden=true;box.replaceChildren();
+  try{const response=await fetch(`/api/feedback?bar_id=${encodeURIComponent(bar.name)}`);if(!response.ok)return;const data=await response.json();if(requestId!==ratingSummaryRequest||ratingState.bar!==bar||!data.count)return;box.innerHTML=`<b>${data.count} 人已评分</b><span>经典 ${data.averages.classic} · 特调 ${data.averages.special} · 环境 ${data.averages.environment} · 服务 ${data.averages.service} · 性价比 ${data.averages.value}</span>`;box.hidden=false}catch{}
 }
 function openRating(bar){
   ratingState.bar=bar;ratingState.scores={};ratingState.opinion=null;
