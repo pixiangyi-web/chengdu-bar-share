@@ -98,7 +98,7 @@ function updateRatingControls(){
 }
 async function loadRatingSummary(bar){
   const box=document.getElementById('rating-summary'),requestId=++ratingSummaryRequest;box.hidden=true;box.replaceChildren();
-  try{const response=await fetch(`/api/feedback?bar_id=${encodeURIComponent(bar.name)}`);if(!response.ok)return;const data=await response.json();if(requestId!==ratingSummaryRequest||ratingState.bar!==bar||!data.count)return;box.innerHTML=`<b>${data.count} 人已评分</b><span>经典 ${data.averages.classic} · 特调 ${data.averages.special} · 环境 ${data.averages.environment} · 服务 ${data.averages.service} · 性价比 ${data.averages.value}</span>`;box.hidden=false}catch{}
+  try{const response=await fetch(`/api/feedback?bar_id=${encodeURIComponent(bar.name)}`,{cache:'no-store'});if(!response.ok)return;const data=await response.json();if(requestId!==ratingSummaryRequest||ratingState.bar!==bar)return;box.innerHTML=data.count?`<b>${data.count} 人已评分</b><span>经典 ${data.averages.classic} · 特调 ${data.averages.special} · 环境 ${data.averages.environment} · 服务 ${data.averages.service} · 性价比 ${data.averages.value}</span>`:'<b>暂无用户评分</b><span>下方五项为待填写内容，不是已有评分。</span>';box.hidden=false}catch{}
 }
 function openRating(bar){
   ratingState.bar=bar;ratingState.scores={};ratingState.opinion=null;
