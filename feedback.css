@@ -14,3 +14,6 @@
 @media(max-width:700px){.filter-selects{grid-template-columns:1fr 1fr}}
 @media(max-width:560px){.filter-selects{grid-template-columns:1fr}}
 .district-item>.rate-button{display:flex;margin:12px 0 0 auto}
+
+/* Keep CJK text aligned across Android font implementations. */
+.site-header .brand{align-items:center}.site-header .brand b{display:block;line-height:1}.site-header nav{align-items:center}.site-header nav a{height:32px;display:inline-flex;align-items:center;line-height:1;white-space:nowrap}.mobile-meta{align-items:center}.mobile-meta>span,.mobile-meta>a{min-height:22px;display:inline-flex;align-items:center;line-height:22px;white-space:nowrap}.mobile-meta>a{text-underline-offset:3px}
