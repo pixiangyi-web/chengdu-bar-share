@@ -98,7 +98,15 @@ function updateRatingControls(){
 }
 async function loadRatingSummary(bar){
   const box=document.getElementById('rating-summary'),requestId=++ratingSummaryRequest;box.hidden=true;box.replaceChildren();
-  try{const response=await fetch(`/api/feedback?bar_id=${encodeURIComponent(bar.name)}`,{cache:'no-store'});if(!response.ok)return;const data=await response.json();if(requestId!==ratingSummaryRequest||ratingState.bar!==bar)return;box.innerHTML=data.count?`<b>${data.count} 人已评分</b><span>经典 ${data.averages.classic} · 特调 ${data.averages.special} · 环境 ${data.averages.environment} · 服务 ${data.averages.service} · 性价比 ${data.averages.value}</span>`:'<b>暂无用户评分</b><span>下方五项为待填写内容，不是已有评分。</span>';box.hidden=false}catch{}
+  try{
+    const response=await fetch(`/api/feedback?bar_id=${encodeURIComponent(bar.name)}`,{cache:'no-store'});
+    if(!response.ok)return;
+    const data=await response.json();
+    if(requestId!==ratingSummaryRequest||ratingState.bar!==bar)return;
+    const reviews=(data.reviews||[]).slice(0,3).map(review=>`<em>${review.source==='mini_program'?'小程序':'网页'}</em> · 经典 ${review.classic_score ?? '-'} · 特调 ${review.special_score ?? '-'} · 环境 ${review.environment_score ?? '-'} · 服务 ${review.service_score ?? '-'} · 性价比 ${review.value_score ?? '-'}`).join('<br>');
+    box.innerHTML=data.count?`<b>${data.count} 人已评分</b><span>经典 ${data.averages.classic} · 特调 ${data.averages.special} · 环境 ${data.averages.environment} · 服务 ${data.averages.service} · 性价比 ${data.averages.value}</span>${reviews?`<small>最新明细<br>${reviews}</small>`:''}`:'<b>暂无用户评分</b><span>下方五项为待填写内容，不是已有评分。</span>';
+    box.hidden=false
+  }catch{}
 }
 function openRating(bar){
   ratingState.bar=bar;ratingState.scores={};ratingState.opinion=null;
@@ -122,7 +130,7 @@ document.getElementById('rating-form').addEventListener('submit',async event=>{
 
 document.getElementById('tag-options').addEventListener('change',event=>{const checked=document.querySelectorAll('#tag-options input:checked');if(checked.length>5){event.target.checked=false;document.getElementById('tag-message').textContent='最多选择 5 个标签。'}});
 document.getElementById('tag-close').addEventListener('click',()=>tagDialog.close());tagDialog.addEventListener('click',event=>{if(event.target===tagDialog)tagDialog.close()});
-document.getElementById('tag-form').addEventListener('submit',async event=>{event.preventDefault();const submit=document.getElementById('tag-submit'),message=document.getElementById('tag-message'),custom=document.getElementById('tag-custom').value.trim();const tags=[...document.querySelectorAll('#tag-options input:checked')].map(input=>input.value);if(custom&&!tags.includes(custom))tags.push(custom);if(!tags.length){message.textContent='请至少选择或填写一个标签。';return}if(tags.length>5){message.textContent='标签总数最多 5 个。';return}submit.disabled=true;message.textContent='正在提交…';try{const response=await fetch('/api/tag-suggestions',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({bar_name:tagState.bar.name,tags,note:document.getElementById('tag-note').value,website:document.getElementById('tag-website').value,device_hash:await deviceHash()})});const data=await response.json().catch(()=>({}));if(!response.ok)throw new Error(data.error||'提交失败，请稍后重试。');message.textContent='感谢提交，后台审核后就会上线。';event.target.reset()}catch(error){message.textContent=error.message||'提交失败，请稍后重试。';submit.disabled=false}});
+document.getElementById('tag-form').addEventListener('submit',async event=>{event.preventDefault();const submit=document.getElementById('tag-submit'),message=document.getElementById('tag-message'),custom=document.getElementById('tag-custom').value.trim();const tags=[...document.querySelectorAll('#tag-options input:checked')].map(input=>input.value);if(custom&&!tags.includes(custom))tags.push(custom);if(!tags.length){message.textContent='请至少选择或填写一个标签。';return}if(tags.length>5){message.textContent='标签总数最多 5 个。';return}submit.disabled=true;message.textContent='正在提交…';try{const response=await fetch('/api/tag-suggestions',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({bar_name:tagState.bar.name,tags,note:document.getElementById('tag-note').value,website:document.getElementById('tag-website').value,source:'web',device_hash:await deviceHash()})});const data=await response.json().catch(()=>({}));if(!response.ok)throw new Error(data.error||'提交失败，请稍后重试。');message.textContent='感谢提交，后台审核后就会上线。';event.target.reset()}catch(error){message.textContent=error.message||'提交失败，请稍后重试。';submit.disabled=false}});
 
 async function loadApprovedTags(){try{const response=await fetch('/api/tag-suggestions');if(!response.ok)return;const data=await response.json();for(const bar of bars){const approved=data.tags?.[bar.name]||[];bar.features=[...approved,...bar.features.filter(tag=>!approved.includes(tag))]}renderRanking()}catch{}}
 

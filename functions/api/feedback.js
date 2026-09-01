@@ -5,7 +5,13 @@ export async function onRequestGet({request,env}){
   const barId=new URL(request.url).searchParams.get("bar_id")?.trim();
   if(!barId)return json({error:"missing bar_id"},400);
   const row=await env.DB.prepare(`SELECT COUNT(*) count,ROUND(AVG(classic_score),1) classic,ROUND(AVG(special_score),1) special,ROUND(AVG(environment_score),1) environment,ROUND(AVG(service_score),1) service,ROUND(AVG(value_score),1) value,SUM(rank_opinion='high') high,SUM(rank_opinion='fair') fair,SUM(rank_opinion='low') low FROM community_feedback WHERE bar_id=?`).bind(barId).first();
-  return json({count:row.count,averages:{classic:row.classic,special:row.special,environment:row.environment,service:row.service,value:row.value},opinions:{high:row.high,fair:row.fair,low:row.low}});
+  const reviews=await env.DB.prepare(`SELECT id,classic_score,special_score,environment_score,service_score,value_score,rank_opinion,source,created_at,updated_at FROM community_feedback WHERE bar_id=? ORDER BY updated_at DESC, id DESC`).bind(barId).all();
+  return json({
+    count:row.count,
+    averages:{classic:row.classic,special:row.special,environment:row.environment,service:row.service,value:row.value},
+    opinions:{high:row.high,fair:row.fair,low:row.low},
+    reviews:reviews.results
+  });
 }
 
 export async function onRequestPost({request,env}){
