@@ -19,7 +19,7 @@ window.MENU_HIGHLIGHTS = {
   "Wiki Wiki": {name:"寿司卷海盗团", flavor:"米酒、海苔、寿司酱与蜂蜜，咸甜米香"},
   "Shake Lab": {name:"虾", flavor:"虾味伏特加、梅斯卡尔、百香果与青柠，咸鲜烟熏"},
   "Bar Woody": {name:"绿色西普调", flavor:"金酒、苦瓜、青苹果、芝麻菜与香料，清爽草本"},
-  "fuddy Duddy": {name:"咸豆花", flavor:"朗姆、白腐乳、白可可、豆奶奶洗与栀子花，咸甜豆香"},
+  "Fuddy Duddy": {name:"咸豆花", flavor:"朗姆、白腐乳、白可可、豆奶奶洗与栀子花，咸甜豆香"},
   "Reply": {name:"#30", flavor:"抹茶、清酒与雪莉酒，茶感浓郁、口感偏厚"},
   "Natural": {name:"青苹果", flavor:"饱满苹果、乳酸发酵感与木姜子木屑，清酸有层次"},
   "VINCE BAR(银泰城店)": {name:"阿波罗的宝藏", flavor:"果味、甜感与红茶香，入口轻松"},
@@ -35,8 +35,12 @@ window.MENU_HIGHLIGHTS = {
   "贰麻酒馆(地下城Live店)": {name:"野格醉打柠檬", flavor:"野格与鲜柠檬，酸爽刺激"},
   "静水": {name:"春晓", flavor:"绿茶或抹茶搭配清酒，清冽茶香"},
   "黑狗兄 Cocktail Bar": {name:"冻顶乌龙菲士", flavor:"冻顶乌龙与哈密瓜，茶香果香清爽融合"},
+  "播州酒家": {name:"贵州姑娘", flavor:"烧椒风味鸡尾酒，焦香不冲，酸甜里带贵州地方感"},
+  "茶不多": {name:"峨眉雾", flavor:"雀舌茶、气泡与果香，清爽又有茶感厚度"},
   "美西": {name:"九重云", flavor:"浑浊 IPA，柑橘与热带水果香突出"},
+  "Set The Bar": {name:"咖喱蟹油", flavor:"紫菜海味、咖喱香料与蟹油，咸鲜回甘"},
   "Glitch": {name:"外婆的厨房书", flavor:"梅斯卡尔、干邑、菠萝、藿香、酱油与辣椒，川味咸鲜"},
+  "Sunset Avenue落日大道·威士忌鸡尾酒吧(紫荆店)": {name:"日落大道", flavor:"红酒为基底，搭配接骨木花糖浆，花果香平衡"},
   "精神暂停": {name:"燎原之星", flavor:"威士忌、焙茶、杨桃、蜂蜜与海盐柠檬，柔顺清爽"},
   "Animal Eden": {name:"蚊子", flavor:"金酒、佛手柑、鼠尾草、菠萝与海盐，草本果香"}
 };
