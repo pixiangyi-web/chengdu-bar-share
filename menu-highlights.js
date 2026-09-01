@@ -29,7 +29,7 @@ window.MENU_HIGHLIGHTS = {
   "柱子": {name:"鸭池", flavor:"百香果与芒果风味水果古斯，酸甜热带果香"},
   "No.32 Bistro": {name:"当季青提特调", flavor:"随季节更新，青提果味饱满"},
   "Bar Neat": {name:"融雪", flavor:"伏特加、玄米绿茶、柚子甘酒与淡奶油，茶香酸甜奶感"},
-  "貘湾": {name:"澄麦", flavor:"朗姆、燕麦奶与麦苗汁，谷物香和大地感"},
+  "貘湾 MO NOCHES BAR": {name:"澄麦", flavor:"朗姆、燕麦奶与麦苗汁，谷物香和大地感"},
   "Bar Coda": {name:"夏夜追凉", flavor:"青提与草本香气，清爽不腻"},
   "Stir&Strain": {name:"柠檬叶花椒 Gimlet", flavor:"柠檬叶金酒与花椒，干净醇厚、微麻清香"},
   "贰麻酒馆(地下城Live店)": {name:"野格醉打柠檬", flavor:"野格与鲜柠檬，酸爽刺激"},
