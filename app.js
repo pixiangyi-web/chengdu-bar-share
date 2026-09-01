@@ -117,7 +117,7 @@ document.getElementById('rating-close').addEventListener('click',()=>ratingDialo
 ratingDialog.addEventListener('click',event=>{if(event.target===ratingDialog)ratingDialog.close()});
 document.getElementById('rating-form').addEventListener('submit',async event=>{
   event.preventDefault();const submit=document.getElementById('rating-submit'),message=document.getElementById('rating-message');submit.disabled=true;message.textContent='正在提交…';
-  try{const response=await fetch('/api/feedback',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({bar_id:ratingState.bar.name,device_hash:await deviceHash(),...Object.fromEntries(ratingDimensions.map(([key])=>[`${key}_score`,ratingState.scores[key]])),rank_opinion:ratingState.opinion})});if(!response.ok)throw new Error();message.textContent='评分已记录，感谢你的判断。';setTimeout(()=>ratingDialog.close(),900)}catch{message.textContent='提交失败，请稍后重试。';submit.disabled=false}
+  try{const response=await fetch('/api/feedback',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({bar_id:ratingState.bar.name,device_hash:await deviceHash(),source:'web',...Object.fromEntries(ratingDimensions.map(([key])=>[`${key}_score`,ratingState.scores[key]])),rank_opinion:ratingState.opinion})});if(!response.ok)throw new Error();message.textContent='评分已记录，感谢你的判断。';setTimeout(()=>ratingDialog.close(),900)}catch{message.textContent='提交失败，请稍后重试。';submit.disabled=false}
 });
 
 document.getElementById('tag-options').addEventListener('change',event=>{const checked=document.querySelectorAll('#tag-options input:checked');if(checked.length>5){event.target.checked=false;document.getElementById('tag-message').textContent='最多选择 5 个标签。'}});
