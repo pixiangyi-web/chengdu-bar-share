@@ -3,7 +3,10 @@ const json=(data,status=200)=>Response.json(data,{status,headers:{"cache-control
 
 export async function onRequestGet({request,env}){
   const barId=new URL(request.url).searchParams.get("bar_id")?.trim();
-  if(!barId)return json({error:"missing bar_id"},400);
+  if(!barId){
+    const rows=await env.DB.prepare(`SELECT bar_id,COUNT(*) count,ROUND(AVG(classic_score),1) classic,ROUND(AVG(special_score),1) special,ROUND(AVG(environment_score),1) environment,ROUND(AVG(service_score),1) service,ROUND(AVG(value_score),1) value,SUM(rank_opinion='high') high,SUM(rank_opinion='fair') fair,SUM(rank_opinion='low') low,MAX(updated_at) updated_at FROM community_feedback GROUP BY bar_id ORDER BY ROUND((AVG(classic_score)+AVG(special_score)+AVG(environment_score)+AVG(service_score)+AVG(value_score))/5.0,1) DESC, count DESC, updated_at DESC`).all();
+    return json({list:rows.results});
+  }
   const row=await env.DB.prepare(`SELECT COUNT(*) count,ROUND(AVG(classic_score),1) classic,ROUND(AVG(special_score),1) special,ROUND(AVG(environment_score),1) environment,ROUND(AVG(service_score),1) service,ROUND(AVG(value_score),1) value,SUM(rank_opinion='high') high,SUM(rank_opinion='fair') fair,SUM(rank_opinion='low') low FROM community_feedback WHERE bar_id=?`).bind(barId).first();
   const reviews=await env.DB.prepare(`SELECT id,classic_score,special_score,environment_score,service_score,value_score,rank_opinion,source,created_at,updated_at FROM community_feedback WHERE bar_id=? ORDER BY updated_at DESC, id DESC`).bind(barId).all();
   return json({
