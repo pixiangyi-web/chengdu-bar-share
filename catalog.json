@@ -1541,28 +1541,6 @@
     },
     {
       "rank": 60,
-      "name": "窄门",
-      "average": 80,
-      "type": "综合清吧",
-      "area": "玉林/芳草街",
-      "areaKey": "玉林",
-      "scores": {
-        "total": 17.34,
-        "professional": 0,
-        "dianping": 0,
-        "xhs": 38.5,
-        "local": 0,
-        "travel": 0
-      },
-      "dianpingUrl": "https://www.dianping.com/shop/l6YbVZQRejgytDPV",
-      "features": [
-        "宠物友好"
-      ],
-      "lat": 30.629258,
-      "lon": 104.059382
-    },
-    {
-      "rank": 61,
       "name": "莫得空间",
       "average": 51,
       "type": "综合清吧",
@@ -1582,7 +1560,7 @@
       "lon": 104.058575
     },
     {
-      "rank": 62,
+      "rank": 61,
       "name": "不二·民谣音乐餐酒吧(九眼桥店)",
       "average": 96,
       "type": "民谣/音乐酒馆",
@@ -1606,7 +1584,7 @@
       "lon": 104.08718
     },
     {
-      "rank": 63,
+      "rank": 62,
       "name": "carpark",
       "average": 41,
       "type": "综合清吧",
@@ -1628,7 +1606,7 @@
       "lon": 104.058388
     },
     {
-      "rank": 64,
+      "rank": 63,
       "name": "PK Painkiller Bar",
       "average": 93,
       "type": "综合清吧",
@@ -1650,7 +1628,7 @@
       "lon": 104.081194
     },
     {
-      "rank": 65,
+      "rank": 64,
       "name": "泡桐精酿酒馆(宽窄店)",
       "average": 66,
       "type": "精酿 Taproom",
@@ -1673,7 +1651,7 @@
       "lon": 104.047681
     },
     {
-      "rank": 66,
+      "rank": 65,
       "name": "Pour It Up",
       "average": 111,
       "type": "综合清吧",
@@ -1695,7 +1673,7 @@
       "lon": 104.072335
     },
     {
-      "rank": 67,
+      "rank": 66,
       "name": "萃坊 StillFun（玉林店）",
       "average": 101,
       "type": "综合清吧",
@@ -1718,7 +1696,7 @@
       "lon": 104.059628
     },
     {
-      "rank": 68,
+      "rank": 67,
       "name": "玉林·小谣火塘酒馆",
       "average": 56,
       "type": "民谣/音乐酒馆",
@@ -1742,7 +1720,7 @@
       "lon": 104.057891
     },
     {
-      "rank": 69,
+      "rank": 68,
       "name": "Sour Taproom",
       "average": 109,
       "type": "精酿 Taproom",
@@ -1764,7 +1742,7 @@
       "lon": 104.085443
     },
     {
-      "rank": 70,
+      "rank": 69,
       "name": "柗",
       "average": 50,
       "type": "综合清吧",
@@ -1786,7 +1764,7 @@
       "lon": 104.105774
     },
     {
-      "rank": 71,
+      "rank": 70,
       "name": "怪兽",
       "average": 139,
       "type": "综合清吧",
@@ -1808,7 +1786,7 @@
       "lon": 104.0818
     },
     {
-      "rank": 72,
+      "rank": 71,
       "name": "福墙",
       "average": 112,
       "type": "综合清吧",
@@ -1830,7 +1808,7 @@
       "lon": 104.1148
     },
     {
-      "rank": 73,
+      "rank": 72,
       "name": "VINT",
       "average": 101,
       "type": "Live House",
@@ -1855,7 +1833,7 @@
       "lon": 104.059207
     },
     {
-      "rank": 74,
+      "rank": 73,
       "name": "大鱼",
       "average": 89,
       "type": "综合清吧",
@@ -1877,7 +1855,7 @@
       "lon": 104.086759
     },
     {
-      "rank": 75,
+      "rank": 74,
       "name": "未来农夫",
       "average": 62,
       "type": "综合清吧",
@@ -1899,7 +1877,7 @@
       "lon": 104.086648
     },
     {
-      "rank": 76,
+      "rank": 75,
       "name": "忘忧酒馆(南湖店)",
       "average": 57,
       "type": "综合清吧",
@@ -1921,7 +1899,7 @@
       "lon": 104.062
     },
     {
-      "rank": 77,
+      "rank": 76,
       "name": "比如",
       "average": 75,
       "type": "综合清吧",
@@ -1943,7 +1921,7 @@
       "lon": 104.047957
     },
     {
-      "rank": 78,
+      "rank": 77,
       "name": "JING BAR（博舍酒店）",
       "average": 141,
       "type": "酒店酒吧",
@@ -1966,7 +1944,7 @@
       "lon": 104.074042
     },
     {
-      "rank": 79,
+      "rank": 78,
       "name": "硬米深夜酒馆(铁像寺水街店)",
       "average": 96,
       "type": "民谣/音乐酒馆",
@@ -1989,7 +1967,7 @@
       "lon": 104.0479
     },
     {
-      "rank": 80,
+      "rank": 79,
       "name": "Odyssey 26°",
       "average": 106,
       "type": "综合清吧",
@@ -2012,7 +1990,7 @@
       "lon": 104.059096
     },
     {
-      "rank": 81,
+      "rank": 80,
       "name": "逃吧",
       "average": 118,
       "type": "综合清吧",
@@ -2036,7 +2014,7 @@
       "lon": 104.0412
     },
     {
-      "rank": 82,
+      "rank": 81,
       "name": "DASH LAND 大师兰德鸡尾酒吧(东郊记忆店)",
       "average": 35,
       "type": "综合清吧",
@@ -2059,7 +2037,7 @@
       "lon": 104.126105
     },
     {
-      "rank": 83,
+      "rank": 82,
       "name": "跳海",
       "average": 71,
       "type": "综合清吧",
@@ -2082,7 +2060,7 @@
       "lon": 104.057819
     },
     {
-      "rank": 84,
+      "rank": 83,
       "name": "楚门",
       "average": 59,
       "type": "综合清吧",
@@ -2105,7 +2083,7 @@
       "lon": 104.059905
     },
     {
-      "rank": 85,
+      "rank": 84,
       "name": "Elixir bar·灵丹妙药",
       "average": 94,
       "type": "综合清吧",
@@ -2125,7 +2103,7 @@
       "lon": 104.079137
     },
     {
-      "rank": 86,
+      "rank": 85,
       "name": "落日岛酒馆(槐树店二路店)",
       "average": 61,
       "type": "综合清吧",
@@ -2147,7 +2125,7 @@
       "lon": 104.127
     },
     {
-      "rank": 87,
+      "rank": 86,
       "name": "Flair（成都富力丽思卡尔顿酒店）",
       "average": 131,
       "type": "酒店酒吧",
@@ -2171,7 +2149,7 @@
       "lon": 104.066
     },
     {
-      "rank": 88,
+      "rank": 87,
       "name": "KEZEE Channel",
       "average": 222,
       "type": "Live House",
@@ -2194,7 +2172,7 @@
       "lon": 104.075128
     },
     {
-      "rank": 89,
+      "rank": 88,
       "name": "耍酒馆民谣餐酒吧(玉林店)",
       "average": 82,
       "type": "民谣/音乐酒馆",
@@ -2217,7 +2195,7 @@
       "lon": 104.058089
     },
     {
-      "rank": 90,
+      "rank": 89,
       "name": "空瓶子 Bottle Live Club",
       "average": 105,
       "type": "Live House",
@@ -2239,7 +2217,7 @@
       "lon": 104.10605
     },
     {
-      "rank": 91,
+      "rank": 90,
       "name": "CD Concert Live音乐现场",
       "average": 242,
       "type": "Live House",
@@ -2262,7 +2240,7 @@
       "lon": 104.047664
     },
     {
-      "rank": 92,
+      "rank": 91,
       "name": "The Bar（成都尼依格罗酒店）",
       "average": 122,
       "type": "酒店酒吧",
@@ -2286,7 +2264,7 @@
       "lon": 104.074318
     },
     {
-      "rank": 93,
+      "rank": 92,
       "name": "梦田音乐Livehouse（成都东郊记忆店）",
       "average": 92,
       "type": "Live House",
@@ -2311,7 +2289,7 @@
       "lon": 104.126678
     },
     {
-      "rank": 94,
+      "rank": 93,
       "name": "晚春",
       "average": 100,
       "type": "综合清吧",
@@ -2334,7 +2312,7 @@
       "lon": 104.04794
     },
     {
-      "rank": 95,
+      "rank": 94,
       "name": "矩阵",
       "average": 102,
       "type": "综合清吧",
@@ -2357,7 +2335,7 @@
       "lon": 104.081491
     },
     {
-      "rank": 96,
+      "rank": 95,
       "name": "啤酒先生",
       "average": 84,
       "type": "精酿 Taproom",
@@ -2380,7 +2358,7 @@
       "lon": 104.06435
     },
     {
-      "rank": 97,
+      "rank": 96,
       "name": "草台",
       "average": 81,
       "type": "综合清吧",
@@ -2403,7 +2381,7 @@
       "lon": 104.106347
     },
     {
-      "rank": 98,
+      "rank": 97,
       "name": "调酒木",
       "average": 92,
       "type": "鸡尾酒吧",
@@ -2426,7 +2404,7 @@
       "lon": 104.027
     },
     {
-      "rank": 99,
+      "rank": 98,
       "name": "Bar Jul",
       "average": 108,
       "type": "综合清吧",
@@ -2449,7 +2427,7 @@
       "lon": 104.07817
     },
     {
-      "rank": 100,
+      "rank": 99,
       "name": "Pluto",
       "average": 112,
       "type": "综合清吧",
@@ -2471,7 +2449,7 @@
       "lon": 104.048237
     },
     {
-      "rank": 101,
+      "rank": 100,
       "name": "Livinrum",
       "average": 93,
       "type": "综合清吧",
@@ -2491,7 +2469,7 @@
       "lon": 104.066
     },
     {
-      "rank": 102,
+      "rank": 101,
       "name": "音乐房子·Vintage Live Bar（玉林总店）",
       "average": 101,
       "type": "民谣/音乐酒馆",
@@ -2516,7 +2494,7 @@
       "lon": 104.058619
     },
     {
-      "rank": 103,
+      "rank": 102,
       "name": "響LiveHouse（成都银河中心店）",
       "average": 88,
       "type": "Live House",
@@ -2539,7 +2517,7 @@
       "lon": 104.065
     },
     {
-      "rank": 104,
+      "rank": 103,
       "name": "inns·LiveHouse",
       "average": 134,
       "type": "Live House",
@@ -2563,7 +2541,7 @@
       "lon": 104.064626
     },
     {
-      "rank": 105,
+      "rank": 104,
       "name": "LUST SUPERLOUNGE",
       "average": 115,
       "type": "派对酒廊",
@@ -2585,7 +2563,7 @@
       "lon": 104.079404
     },
     {
-      "rank": 106,
+      "rank": 105,
       "name": "M99 BEER世界啤酒吧",
       "average": 83,
       "type": "精酿 Taproom",
@@ -2609,7 +2587,7 @@
       "lon": 104.023
     },
     {
-      "rank": 107,
+      "rank": 106,
       "name": "无名酒馆",
       "average": 56,
       "type": "综合清吧",
@@ -2631,7 +2609,7 @@
       "lon": 104.112
     },
     {
-      "rank": 108,
+      "rank": 107,
       "name": "Vertigo No.3",
       "average": 99,
       "type": "综合清吧",
@@ -2653,7 +2631,7 @@
       "lon": 104.10274
     },
     {
-      "rank": 109,
+      "rank": 108,
       "name": "Bar Scrim",
       "average": 92,
       "type": "综合清吧",
@@ -2673,7 +2651,7 @@
       "lon": 104.074589
     },
     {
-      "rank": 110,
+      "rank": 109,
       "name": "塘谣火塘民谣酒吧（九眼桥店）",
       "average": 93,
       "type": "民谣/音乐酒馆",
@@ -2696,7 +2674,7 @@
       "lon": 104.085371
     },
     {
-      "rank": 111,
+      "rank": 110,
       "name": "Re-Social",
       "average": 110,
       "type": "综合清吧",
@@ -2719,7 +2697,7 @@
       "lon": 104.059757
     },
     {
-      "rank": 112,
+      "rank": 111,
       "name": "SoFa home bar",
       "average": 137,
       "type": "民谣/音乐酒馆",
@@ -2742,7 +2720,7 @@
       "lon": 104.087457
     },
     {
-      "rank": 113,
+      "rank": 112,
       "name": "Groove嚎宅·R&B Bar（兰桂坊水璟唐店）",
       "average": 120,
       "type": "民谣/音乐酒馆",
@@ -2767,7 +2745,7 @@
       "lon": 104.083211
     },
     {
-      "rank": 114,
+      "rank": 113,
       "name": "Matrix Roof 矩阵",
       "average": 68,
       "type": "综合清吧",
@@ -2790,7 +2768,7 @@
       "lon": 104.055
     },
     {
-      "rank": 115,
+      "rank": 114,
       "name": "inwave音浪xchurch教堂复古花园餐酒吧（悠方购物中心店）",
       "average": 133,
       "type": "餐酒吧",
@@ -2814,7 +2792,7 @@
       "lon": 104.0637
     },
     {
-      "rank": 116,
+      "rank": 115,
       "name": "LAVIE（成都339店）",
       "average": 122,
       "type": "民谣/音乐酒馆",
@@ -2838,7 +2816,7 @@
       "lon": 104.091824
     },
     {
-      "rank": 117,
+      "rank": 116,
       "name": "Bar Moonshine",
       "average": 99,
       "type": "综合清吧",
@@ -2861,7 +2839,7 @@
       "lon": 104.074615
     },
     {
-      "rank": 118,
+      "rank": 117,
       "name": "OKEANOS海王餐酒吧",
       "average": 67,
       "type": "餐酒吧",
@@ -2884,7 +2862,7 @@
       "lon": 104.086171
     },
     {
-      "rank": 119,
+      "rank": 118,
       "name": "Demo Social bar",
       "average": 108,
       "type": "派对酒廊",
@@ -2909,7 +2887,7 @@
       "lon": 104.0479
     },
     {
-      "rank": 120,
+      "rank": 119,
       "name": "十四的万花筒·民谣烧烤酒吧",
       "average": 69,
       "type": "民谣/音乐酒馆",
@@ -2931,7 +2909,7 @@
       "lon": 104.026764
     },
     {
-      "rank": 121,
+      "rank": 120,
       "name": "微醺民谣酒馆（九眼桥店）",
       "average": 113,
       "type": "民谣/音乐酒馆",
@@ -2955,7 +2933,7 @@
       "lon": 104.087309
     },
     {
-      "rank": 122,
+      "rank": 121,
       "name": "MAMACITA",
       "average": 90,
       "type": "综合清吧",
@@ -2978,7 +2956,7 @@
       "lon": 104.073391
     },
     {
-      "rank": 123,
+      "rank": 122,
       "name": "Mr.Q Bar (太古里店)",
       "average": 100,
       "type": "综合清吧",
@@ -3002,7 +2980,7 @@
       "lon": 104.08064
     },
     {
-      "rank": 124,
+      "rank": 123,
       "name": "悟·小酒馆",
       "average": null,
       "type": "民谣/音乐酒馆",
@@ -3024,7 +3002,7 @@
       "lon": null
     },
     {
-      "rank": 125,
+      "rank": 124,
       "name": "PP·PEUÀPEU·佩佩·乐园（成都兰桂坊店）",
       "average": 109,
       "type": "民谣/音乐酒馆",
@@ -3050,7 +3028,7 @@
       "lon": 104.082404
     },
     {
-      "rank": 126,
+      "rank": 125,
       "name": "四合院酒吧",
       "average": 114,
       "type": "民谣/音乐酒馆",
@@ -3072,7 +3050,7 @@
       "lon": 104.0806
     },
     {
-      "rank": 127,
+      "rank": 126,
       "name": "GINO WU 西餐咖啡厅红酒吧(麓镇店)",
       "average": 113,
       "type": "葡萄酒餐吧",
@@ -3098,7 +3076,7 @@
       "lon": 104.132
     },
     {
-      "rank": 128,
+      "rank": 127,
       "name": "望川精酿友谊商店",
       "average": 57,
       "type": "精酿 Taproom",
@@ -3120,7 +3098,7 @@
       "lon": 104.05746
     },
     {
-      "rank": 129,
+      "rank": 128,
       "name": "艺术家 Artist Whisky&Cocktail",
       "average": 84,
       "type": "综合清吧",
@@ -3143,7 +3121,7 @@
       "lon": 104.074707
     },
     {
-      "rank": 130,
+      "rank": 129,
       "name": "Counting 计时器",
       "average": 123,
       "type": "综合清吧",
@@ -3166,7 +3144,7 @@
       "lon": 104.111
     },
     {
-      "rank": 131,
+      "rank": 130,
       "name": "千草堆",
       "average": null,
       "type": "综合清吧",
@@ -3186,7 +3164,7 @@
       "lon": null
     },
     {
-      "rank": 132,
+      "rank": 131,
       "name": "Tai Saloon",
       "average": 96,
       "type": "综合清吧",
@@ -3208,7 +3186,7 @@
       "lon": 104.074596
     },
     {
-      "rank": 133,
+      "rank": 132,
       "name": "木壳",
       "average": 70,
       "type": "综合清吧",
@@ -3231,7 +3209,7 @@
       "lon": 104.126945
     },
     {
-      "rank": 134,
+      "rank": 133,
       "name": "蜜和麦精酿啤酒吧honey&malt",
       "average": 122,
       "type": "精酿 Taproom",
@@ -3253,7 +3231,7 @@
       "lon": 104.064923
     },
     {
-      "rank": 135,
+      "rank": 134,
       "name": "板凳鲜酿·精酿啤酒（科华北路店）",
       "average": 39,
       "type": "精酿 Taproom",
@@ -3275,7 +3253,7 @@
       "lon": 104.074865
     },
     {
-      "rank": 136,
+      "rank": 135,
       "name": "野地诗歌精酿",
       "average": 51,
       "type": "精酿 Taproom",
@@ -3297,7 +3275,7 @@
       "lon": 104.05974
     },
     {
-      "rank": 137,
+      "rank": 136,
       "name": "懒人精酿啤酒馆",
       "average": 61,
       "type": "精酿 Taproom",
@@ -3319,7 +3297,7 @@
       "lon": 104.058714
     },
     {
-      "rank": 138,
+      "rank": 137,
       "name": "叁杯啤酒馆·院子茶咖·精酿厨房（东门市井店）",
       "average": 68,
       "type": "精酿 Taproom",
@@ -3341,7 +3319,7 @@
       "lon": 104.119
     },
     {
-      "rank": 139,
+      "rank": 138,
       "name": "Rizz Bar·酒食水烟集合（金融城店）",
       "average": 132,
       "type": "餐酒吧",
@@ -3363,7 +3341,7 @@
       "lon": 104.047481
     },
     {
-      "rank": 140,
+      "rank": 139,
       "name": "Gin’s Bar酒吧",
       "average": 68,
       "type": "综合清吧",
@@ -3386,7 +3364,7 @@
       "lon": 104.075
     },
     {
-      "rank": 141,
+      "rank": 140,
       "name": "Project 26° Whisky&Cocktail Bar",
       "average": 100,
       "type": "威士忌/鸡尾酒吧",
@@ -3408,7 +3386,7 @@
       "lon": 104.02704
     },
     {
-      "rank": 142,
+      "rank": 141,
       "name": "霁月Jill restaurant & bar（宽窄福感肆店）",
       "average": 98,
       "type": "餐酒吧",
@@ -3428,7 +3406,7 @@
       "lon": 104.048254
     },
     {
-      "rank": 143,
+      "rank": 142,
       "name": "岚酒会·威士忌酒吧",
       "average": 93,
       "type": "威士忌/鸡尾酒吧",
@@ -3450,7 +3428,7 @@
       "lon": 104.063956
     },
     {
-      "rank": 144,
+      "rank": 143,
       "name": "大胶布酒馆（宽窄店）",
       "average": null,
       "type": "综合清吧",
@@ -3472,7 +3450,7 @@
       "lon": 104.047287
     },
     {
-      "rank": 145,
+      "rank": 144,
       "name": "MATATA COCKTAIL&WHISKY BAR",
       "average": 97,
       "type": "综合清吧",
