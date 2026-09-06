@@ -23,7 +23,6 @@ const emptyProfile = { wanted: [], visited: [], rated: [] };
 export async function onRequestGet({ request, env }) {
   const openid = await identity(request, env);
   if (!openid) return json({ error: "unauthorized" }, 401);
-  await env.DB.prepare("CREATE TABLE IF NOT EXISTS user_profiles (openid TEXT PRIMARY KEY, profile TEXT NOT NULL, updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)").run();
   const row = await env.DB.prepare("SELECT profile FROM user_profiles WHERE openid=?").bind(openid).first();
   return json({ profile: row ? JSON.parse(row.profile) : emptyProfile });
 }
@@ -31,7 +30,6 @@ export async function onRequestGet({ request, env }) {
 export async function onRequestPut({ request, env }) {
   const openid = await identity(request, env);
   if (!openid) return json({ error: "unauthorized" }, 401);
-  await env.DB.prepare("CREATE TABLE IF NOT EXISTS user_profiles (openid TEXT PRIMARY KEY, profile TEXT NOT NULL, updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)").run();
   let body;
   try { body = await request.json(); } catch { return json({ error: "invalid json" }, 400); }
   const input = body.profile || {};
