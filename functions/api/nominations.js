@@ -1,5 +1,10 @@
 const json=(data,status=200)=>Response.json(data,{status,headers:{"cache-control":"no-store"}});
 
+export async function onRequestGet({env}){
+  const {results}=await env.DB.prepare(`SELECT id,bar_name,area,bar_type,source_url,reason,status,created_at FROM bar_nominations WHERE status IN ('pending','reviewing','accepted') ORDER BY created_at DESC, id DESC`).all();
+  return json({list:results});
+}
+
 export async function onRequestPost({request,env}){
   let body;try{body=await request.json()}catch{return json({error:"提交内容无法读取"},400)}
   if(body.website)return json({ok:true});
