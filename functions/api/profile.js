@@ -23,8 +23,12 @@ const emptyProfile = { wanted: [], visited: [], rated: [] };
 export async function onRequestGet({ request, env }) {
   const openid = await identity(request, env);
   if (!openid) return json({ error: "unauthorized" }, 401);
-  const row = await env.DB.prepare("SELECT profile FROM user_profiles WHERE openid=?").bind(openid).first();
-  return json({ profile: row ? JSON.parse(row.profile) : emptyProfile });
+  const row = await env.DB.prepare("SELECT profile FROM user_profiles WHERE openid=? LIMIT 1").bind(openid).first();
+  let profile = emptyProfile;
+  if (row?.profile) {
+    try { profile = JSON.parse(row.profile); } catch { profile = emptyProfile; }
+  }
+  return json({ profile });
 }
 
 export async function onRequestPut({ request, env }) {
@@ -38,6 +42,6 @@ export async function onRequestPut({ request, env }) {
     visited: Array.isArray(input.visited) ? input.visited.slice(0, 500) : [],
     rated: Array.isArray(input.rated) ? input.rated.slice(0, 500) : []
   };
-  await env.DB.prepare("INSERT INTO user_profiles (openid,profile,updated_at) VALUES (?,?,CURRENT_TIMESTAMP) ON CONFLICT(openid) DO UPDATE SET profile=excluded.profile,updated_at=CURRENT_TIMESTAMP").bind(openid, JSON.stringify(profile)).run();
+  await env.DB.prepare("INSERT OR REPLACE INTO user_profiles (openid,profile,updated_at) VALUES (?,?,CURRENT_TIMESTAMP)").bind(openid, JSON.stringify(profile)).run();
   return json({ ok: true });
 }
