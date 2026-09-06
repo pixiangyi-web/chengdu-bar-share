@@ -1,21 +1,30 @@
 const json = (data, status = 200) => Response.json(data, { status, headers: { "cache-control": "no-store" } });
 
+function base64urlBytes(value) {
+  const normalized = String(value).replace(/-/g, "+").replace(/_/g, "/");
+  const padding = "=".repeat((4 - normalized.length % 4) % 4);
+  return Uint8Array.from(atob(normalized + padding), (char) => char.charCodeAt(0));
+}
+
 function decode(value) {
-  try { return JSON.parse(atob(value.replace(/-/g, "+").replace(/_/g, "/"))); } catch { return null; }
+  try { return JSON.parse(new TextDecoder().decode(base64urlBytes(value))); } catch { return null; }
 }
 
 async function identity(request, env) {
-  const value = request.headers.get("x-session-token") || request.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
-  const [payload, signature] = String(value || "").split(".");
-  if (!payload || !signature) return null;
-  const secret = env.SESSION_SECRET || env.WECHAT_APPSECRET;
-  if (!secret) return null;
-  const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["verify"]);
-  const encoded = signature.replace(/-/g, "+").replace(/_/g, "/") + "==";
-  const bytes = Uint8Array.from(atob(encoded), (char) => char.charCodeAt(0));
-  const valid = await crypto.subtle.verify("HMAC", key, bytes, new TextEncoder().encode(payload));
-  const data = decode(payload);
-  return valid && data?.openid && data.exp > Math.floor(Date.now() / 1000) ? data.openid : null;
+  try {
+    const value = request.headers.get("x-session-token") || request.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
+    const [payload, signature] = String(value || "").split(".");
+    if (!payload || !signature) return null;
+    const secret = env.SESSION_SECRET || env.WECHAT_APPSECRET;
+    if (!secret) return null;
+    const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["verify"]);
+    const valid = await crypto.subtle.verify("HMAC", key, base64urlBytes(signature), new TextEncoder().encode(payload));
+    const data = decode(payload);
+    return valid && data?.openid && data.exp > Math.floor(Date.now() / 1000) ? data.openid : null;
+  } catch (error) {
+    console.warn("[profile auth] invalid session", error);
+    return null;
+  }
 }
 
 const emptyProfile = { wanted: [], visited: [], rated: [] };
@@ -32,7 +41,7 @@ export async function onRequestGet({ request, env }) {
     return json({ profile });
   } catch (error) {
     console.error("[profile GET]", error);
-    return json({ error: "profile database error", detail: String(error?.message || error) }, 500);
+    return json({ error: "profile unavailable" }, 503);
   }
 }
 
@@ -52,6 +61,6 @@ export async function onRequestPut({ request, env }) {
     return json({ ok: true });
   } catch (error) {
     console.error("[profile PUT]", error);
-    return json({ error: "profile database error", detail: String(error?.message || error) }, 500);
+    return json({ error: "profile unavailable" }, 503);
   }
 }
