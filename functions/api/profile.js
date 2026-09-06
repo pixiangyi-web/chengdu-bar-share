@@ -5,7 +5,7 @@ function decode(value) {
 }
 
 async function identity(request, env) {
-  const value = request.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
+  const value = request.headers.get("x-session-token") || request.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
   const [payload, signature] = String(value || "").split(".");
   if (!payload || !signature) return null;
   const secret = env.SESSION_SECRET || env.WECHAT_APPSECRET;

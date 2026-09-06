@@ -2,7 +2,7 @@ const scoreFields=["classic_score","special_score","environment_score","service_
 const json=(data,status=200)=>Response.json(data,{status,headers:{"cache-control":"no-store"}});
 
 async function getOpenid(request,env){
-  const value=request.headers.get("authorization")?.replace(/^Bearer\s+/i,"");
+  const value=request.headers.get("x-session-token")||request.headers.get("authorization")?.replace(/^Bearer\s+/i,"");
   const [payload,signature]=String(value||"").split(".");
   const secret=env.SESSION_SECRET||env.WECHAT_APPSECRET;
   if(!payload||!signature||!secret)return null;
