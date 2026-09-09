@@ -1,7 +1,7 @@
 const json=(data,status=200)=>Response.json(data,{status,headers:{"cache-control":"no-store"}});
 
 export async function onRequestGet({env}){
-  const {results}=await env.DB.prepare(`SELECT n.id,n.bar_name,n.area,n.bar_type,n.source_url,n.reason,n.status,n.created_at,COALESCE(f.review_count,0) review_count FROM bar_nominations n LEFT JOIN (SELECT lower(trim(bar_id)) bar_key,COUNT(*) review_count FROM community_feedback GROUP BY lower(trim(bar_id))) f ON lower(trim(n.bar_name))=f.bar_key WHERE n.status IN ('pending','reviewing','accepted') AND COALESCE(f.review_count,0)<=5 ORDER BY n.created_at DESC,n.id DESC`).all();
+  const {results}=await env.DB.prepare(`SELECT n.id,n.bar_name,n.area,n.bar_type,n.source_url,n.reason,n.status,n.created_at,COALESCE(f.review_count,0) review_count FROM bar_nominations n LEFT JOIN (SELECT lower(trim(bar_id)) bar_key,COUNT(*) review_count FROM community_feedback GROUP BY lower(trim(bar_id))) f ON lower(trim(n.bar_name))=f.bar_key WHERE n.status IN ('pending','reviewing','accepted') AND COALESCE(f.review_count,0)<5 ORDER BY n.created_at DESC,n.id DESC`).all();
   const grouped=new Map();
   for(const row of results){
     const key=String(row.bar_name||'').trim().toLowerCase();
