@@ -37,6 +37,8 @@ async function bindDeviceFeedback(request, env, openid) {
 }
 
 export async function onRequestGet({ request, env }) {
+  const membershipError = await requireMembership(request, env);
+  if (membershipError) return membershipError;
   const openid = await identity(request, env);
   if (!openid) return json({ error: "unauthorized" }, 401);
   try {
