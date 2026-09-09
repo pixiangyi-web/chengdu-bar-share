@@ -17,6 +17,14 @@ export async function onRequestPost({request,env}){
   const source=body.source === "mini_program" ? "mini_program" : "web";
   const tags=[...new Set((Array.isArray(body.tags)?body.tags:[]).map(tag=>String(tag).trim().slice(0,24)).filter(Boolean))].slice(0,5);
   if(!barName||!tags.length||!/^[a-f0-9]{64}$/.test(device))return json({error:"请至少选择或填写一个标签"},400);
-  await env.DB.prepare(`INSERT INTO bar_tag_suggestions (bar_name,suggested_tags,note,device_hash,source) VALUES (?,?,?,?,?) ON CONFLICT(bar_name,device_hash) DO UPDATE SET suggested_tags=excluded.suggested_tags,note=excluded.note,source=excluded.source,status='pending',reviewed_at=NULL,created_at=CURRENT_TIMESTAMP`).bind(barName,JSON.stringify(tags),note,device,source).run();
-  return json({ok:true});
+  const catalogResponse=await fetch(new URL("/api/catalog",request.url));
+  const catalog=catalogResponse.ok?await catalogResponse.json():{bars:[]};
+  const bar=catalog.bars?.find(item=>String(item.name||"").trim().toLowerCase()===barName.toLowerCase());
+  const currentTags=new Set((bar?.features||[]).map(tag=>String(tag).trim().toLowerCase()));
+  const accepted=await env.DB.prepare("SELECT suggested_tags FROM bar_tag_suggestions WHERE lower(trim(bar_name))=lower(trim(?)) AND status='accepted'").bind(barName).all();
+  for(const row of accepted.results){try{JSON.parse(row.suggested_tags||"[]").forEach(tag=>currentTags.add(String(tag).trim().toLowerCase()))}catch{}}
+  const newTags=tags.filter(tag=>!currentTags.has(tag.toLowerCase()));
+  if(!newTags.length)return json({ok:true,reviewed:true,pending:false});
+  await env.DB.prepare(`INSERT INTO bar_tag_suggestions (bar_name,suggested_tags,note,device_hash,source) VALUES (?,?,?,?,?) ON CONFLICT(bar_name,device_hash) DO UPDATE SET suggested_tags=excluded.suggested_tags,note=excluded.note,source=excluded.source,status='pending',reviewed_at=NULL,created_at=CURRENT_TIMESTAMP`).bind(barName,JSON.stringify(newTags),note,device,source).run();
+  return json({ok:true,reviewed:false,pending:true});
 }
