@@ -8,7 +8,7 @@ Pages variables/secrets: `WECHAT_OFFER_ID=1450644200`, `WECHAT_APP_KEY`, `WECHAT
 
 The message push URL is `https://chengdu-bar-share.pages.dev/pay/notify`. If encrypted message mode is enabled, also add `WECHAT_NOTIFY_AES_KEY` (the 43-character EncodingAESKey). The callback must use the same Token and encryption mode configured in the mini-program console.
 
-The reconciliation Worker is `chengdu-bar-payment-reconcile`, scheduled every five minutes. Add the same `PAY_RECONCILE_SECRET` as a Worker secret and as a Pages secret; otherwise it deliberately returns 401 and does not query orders.
+当前部署不依赖单独的 Worker。小程序在支付返回、进入会员页时调用 `/pay/query` 补偿查单；因此不需要配置 `PAY_RECONCILE_SECRET`，也不需要在 Cloudflare 中寻找 Worker。
 
 ## Release acceptance
 
