@@ -39,10 +39,11 @@ export async function onRequestPost({request,env}){
   await ensureFeedbackTextColumns(env);
   let body;try{body=await request.json()}catch{return json({error:"invalid json"},400)}
   const barId=String(body.bar_id||"").trim(),device=String(body.device_hash||""),openid=await getOpenid(request,env),source=body.source === "mini_program" ? "mini_program" : "web",note=String(body.note||"").trim().slice(0,500),tags=JSON.stringify([...new Set((Array.isArray(body.tags)?body.tags:[]).map(tag=>String(tag).trim().slice(0,24)).filter(Boolean))].slice(0,5));
+  if(source === "mini_program" && !openid)return json({error:"wechat auth required"},401);
   if(!barId||barId.length>120||(!openid&&!/^[a-f0-9]{64}$/.test(device)))return json({error:"invalid identity"},400);
   if(scoreFields.some(field=>!Number.isInteger(body[field])||body[field]<1||body[field]>5)||!["high","fair","low"].includes(body.rank_opinion))return json({error:"invalid rating"},400);
   const existing = openid
-    ? await env.DB.prepare("SELECT id FROM community_feedback WHERE bar_id=? AND openid=?").bind(barId,openid).first()
+    ? await env.DB.prepare("SELECT id FROM community_feedback WHERE bar_id=? AND (openid=? OR device_hash=?) LIMIT 1").bind(barId,openid,device).first()
     : await env.DB.prepare("SELECT id FROM community_feedback WHERE bar_id=? AND device_hash=?").bind(barId,device).first();
   if(existing){
     await env.DB.prepare("UPDATE community_feedback SET openid=COALESCE(?,openid),classic_score=?,special_score=?,environment_score=?,service_score=?,value_score=?,rank_opinion=?,source=?,note=?,tags=?,updated_at=CURRENT_TIMESTAMP WHERE id=?").bind(openid,...scoreFields.map(field=>body[field]),body.rank_opinion,source,note,tags,existing.id).run();
