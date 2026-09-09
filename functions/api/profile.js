@@ -28,11 +28,19 @@ async function identity(request, env) {
 }
 
 const emptyProfile = { wanted: [], visited: [], rated: [] };
+const DEVICE_HASH_RE = /^[a-f0-9]{64}$/;
+
+async function bindDeviceFeedback(request, env, openid) {
+  const device = String(request.headers.get("x-device-hash") || "");
+  if (!DEVICE_HASH_RE.test(device)) return;
+  await env.DB.prepare("UPDATE community_feedback SET openid=? WHERE device_hash=? AND (openid IS NULL OR openid='')").bind(openid, device).run();
+}
 
 export async function onRequestGet({ request, env }) {
   const openid = await identity(request, env);
   if (!openid) return json({ error: "unauthorized" }, 401);
   try {
+    await bindDeviceFeedback(request, env, openid);
     const row = await env.DB.prepare("SELECT profile FROM user_profiles WHERE openid=? LIMIT 1").bind(openid).first();
     let profile = emptyProfile;
     if (row?.profile) {
@@ -51,6 +59,7 @@ export async function onRequestPut({ request, env }) {
   let body;
   try { body = await request.json(); } catch { return json({ error: "invalid json" }, 400); }
   try {
+    await bindDeviceFeedback(request, env, openid);
     const input = body.profile || {};
     const profile = {
       wanted: Array.isArray(input.wanted) ? input.wanted.slice(0, 500) : [],

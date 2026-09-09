@@ -18,6 +18,12 @@ async function getOpenid(request,env){
   }catch{return null}
 }
 
+async function bindDeviceFeedback(request,env,openid){
+  const device=String(request.headers.get("x-device-hash")||"");
+  if(!openid||!/^[a-f0-9]{64}$/.test(device))return;
+  await env.DB.prepare("UPDATE community_feedback SET openid=? WHERE device_hash=? AND (openid IS NULL OR openid='')").bind(openid,device).run();
+}
+
 export async function onRequestGet({request,env}){
   await ensureFeedbackTextColumns(env);
   const barId=new URL(request.url).searchParams.get("bar_id")?.trim();
@@ -40,6 +46,7 @@ export async function onRequestPost({request,env}){
   let body;try{body=await request.json()}catch{return json({error:"invalid json"},400)}
   const barId=String(body.bar_id||"").trim(),device=String(body.device_hash||""),openid=await getOpenid(request,env),source=body.source === "mini_program" ? "mini_program" : "web",note=String(body.note||"").trim().slice(0,500),tags=JSON.stringify([...new Set((Array.isArray(body.tags)?body.tags:[]).map(tag=>String(tag).trim().slice(0,24)).filter(Boolean))].slice(0,5));
   if(source === "mini_program" && !openid)return json({error:"wechat auth required"},401);
+  await bindDeviceFeedback(request,env,openid);
   if(!barId||barId.length>120||(!openid&&!/^[a-f0-9]{64}$/.test(device)))return json({error:"invalid identity"},400);
   if(scoreFields.some(field=>!Number.isInteger(body[field])||body[field]<1||body[field]>5)||!["high","fair","low"].includes(body.rank_opinion))return json({error:"invalid rating"},400);
   const existing = openid
