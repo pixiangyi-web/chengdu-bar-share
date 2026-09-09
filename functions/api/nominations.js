@@ -1,8 +1,19 @@
 const json=(data,status=200)=>Response.json(data,{status,headers:{"cache-control":"no-store"}});
 
 export async function onRequestGet({env}){
-  const {results}=await env.DB.prepare(`SELECT id,bar_name,area,bar_type,source_url,reason,status,created_at FROM bar_nominations WHERE status IN ('pending','reviewing','accepted') ORDER BY created_at DESC, id DESC`).all();
-  return json({list:results});
+  const {results}=await env.DB.prepare(`SELECT n.id,n.bar_name,n.area,n.bar_type,n.source_url,n.reason,n.status,n.created_at,COALESCE(f.review_count,0) review_count FROM bar_nominations n LEFT JOIN (SELECT lower(trim(bar_id)) bar_key,COUNT(*) review_count FROM community_feedback GROUP BY lower(trim(bar_id))) f ON lower(trim(n.bar_name))=f.bar_key WHERE n.status IN ('pending','reviewing','accepted') AND COALESCE(f.review_count,0)<=5 ORDER BY n.created_at DESC,n.id DESC`).all();
+  const grouped=new Map();
+  for(const row of results){
+    const key=String(row.bar_name||'').trim().toLowerCase();
+    const current=grouped.get(key);
+    if(!current){grouped.set(key,{...row,reason:row.reason?[row.reason]:[],review_count:Number(row.review_count)||0});continue}
+    if(row.reason&&!current.reason.includes(row.reason))current.reason.push(row.reason);
+    if(!current.source_url&&row.source_url)current.source_url=row.source_url;
+    if(!current.area&&row.area)current.area=row.area;
+    if(!current.bar_type&&row.bar_type)current.bar_type=row.bar_type;
+    current.created_at=current.created_at>row.created_at?current.created_at:row.created_at;
+  }
+  return json({list:[...grouped.values()].map(item=>({...item,reason:item.reason.join('；')}))});
 }
 
 export async function onRequestPost({request,env}){
