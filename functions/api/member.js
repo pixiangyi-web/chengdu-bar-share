@@ -1,3 +1,4 @@
+import { configured, failure } from "../../lib/payment.js";
 const json = (data, status = 200) => Response.json(data, { status, headers: { "cache-control": "no-store" } });
 
 function bytes(value) {
@@ -21,6 +22,8 @@ async function identity(request, env) {
 export async function onRequestGet({ request, env }) {
   const openid = await identity(request, env);
   if (!openid) return json({ error: "unauthorized" }, 401);
-  const row = await env.DB.prepare("SELECT product_id,status,created_at,updated_at FROM memberships WHERE openid=? LIMIT 1").bind(openid).first();
-  return json({ member: Boolean(row && row.status === "active"), membership: row || null });
+  try {
+    const row = await env.DB.prepare("SELECT product_id,status,created_at,updated_at FROM memberships WHERE openid=? LIMIT 1").bind(openid).first();
+    return json({ member: Boolean(row && row.status === "active"), membership: row || null, required: env.MEMBERSHIP_REQUIRED === "true", paymentEnabled: configured(env) && env.PAYMENT_ENABLED === "true", priceFen: 188 });
+  } catch (error) { return failure(error); }
 }

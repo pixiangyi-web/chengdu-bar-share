@@ -4,7 +4,7 @@ The Pages project now contains `/pay/order`, `/pay/query`, and `/pay/notify`. Ap
 
 ## Required variables
 
-Pages variables/secrets: `WECHAT_OFFER_ID=1450644200`, `WECHAT_APP_KEY`, `WECHAT_APPID`, `WECHAT_APPSECRET`, `WECHAT_NOTIFY_TOKEN`, and `SESSION_SECRET`. Keep `PAYMENT_ENABLED=false` until the payment console, callback URL, and a real test order are ready. Set `MEMBERSHIP_REQUIRED=true` only after that test succeeds.
+Pages variables/secrets: `WECHAT_OFFER_ID=1450644200`, `WECHAT_APP_KEY`, `WECHAT_APPID`, `WECHAT_APPSECRET`, `WECHAT_NOTIFY_TOKEN`, and `SESSION_SECRET`. The server price is 188 fen (1.88 RMB) and must match the published item. Keep `PAYMENT_ENABLED=false` until the payment console, callback URL, and a real test order are ready. Set `MEMBERSHIP_REQUIRED=true` only after that test succeeds.
 
 The message push URL is `https://chengdu-bar-share.pages.dev/pay/notify`. If encrypted message mode is enabled, also add `WECHAT_NOTIFY_AES_KEY` (the 43-character EncodingAESKey). The callback must use the same Token and encryption mode configured in the mini-program console.
 
