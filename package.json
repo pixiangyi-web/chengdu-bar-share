@@ -1,0 +1,7 @@
+{
+  "name": "chengdu-bar-share",
+  "private": true,
+  "type": "module",
+  "scripts": { "test": "node --test tests/*.test.js" },
+  "dependencies": { "fast-xml-parser": "^5.5.6" }
+}

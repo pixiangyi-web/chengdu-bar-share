@@ -1,0 +1,8 @@
+node_modules
+lib
+ops
+tests
+migrations
+package.json
+package-lock.json
+*.md
