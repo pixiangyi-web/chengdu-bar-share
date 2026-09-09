@@ -17,3 +17,6 @@
 ## 数据口径
 
 本项目用于行业研究与传播观察。排名代表研究样本优先级，不等于个人口味榜；地图使用商圈级锚点，不作导航。
+# Developer admin
+
+Set the Cloudflare Pages secret `ADMIN_OPENIDS` to the developer WeChat openid (or multiple openids separated by commas). The mini-program shows the developer admin entry only after `/api/admin` confirms that the signed-in WeChat identity is on this allowlist.

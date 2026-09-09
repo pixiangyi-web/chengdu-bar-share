@@ -1,5 +1,8 @@
 const scoreFields=["classic_score","special_score","environment_score","service_score","value_score"];
 const json=(data,status=200)=>Response.json(data,{status,headers:{"cache-control":"no-store"}});
+async function ensureFeedbackTextColumns(env){
+  for(const sql of ["ALTER TABLE community_feedback ADD COLUMN note TEXT NOT NULL DEFAULT ''","ALTER TABLE community_feedback ADD COLUMN tags TEXT NOT NULL DEFAULT '[]'"]){try{await env.DB.prepare(sql).run()}catch{}}
+}
 
 async function getOpenid(request,env){
   const value=request.headers.get("x-session-token")||request.headers.get("authorization")?.replace(/^Bearer\s+/i,"");
@@ -16,6 +19,7 @@ async function getOpenid(request,env){
 }
 
 export async function onRequestGet({request,env}){
+  await ensureFeedbackTextColumns(env);
   const barId=new URL(request.url).searchParams.get("bar_id")?.trim();
   if(!barId){
     const rows=await env.DB.prepare(`SELECT f.bar_id,f.count,f.classic,f.special,f.environment,f.service,f.value,f.high,f.fair,f.low,f.updated_at,n.bar_name nomination_name,n.area nomination_area,n.bar_type nomination_type FROM (SELECT bar_id,COUNT(*) count,ROUND(AVG(classic_score),1) classic,ROUND(AVG(special_score),1) special,ROUND(AVG(environment_score),1) environment,ROUND(AVG(service_score),1) service,ROUND(AVG(value_score),1) value,SUM(rank_opinion='high') high,SUM(rank_opinion='fair') fair,SUM(rank_opinion='low') low,MAX(updated_at) updated_at FROM community_feedback GROUP BY bar_id) f LEFT JOIN (SELECT lower(trim(bar_name)) bar_key,MAX(bar_name) bar_name,MAX(area) area,MAX(bar_type) bar_type FROM bar_nominations WHERE status IN ('pending','reviewing','accepted') GROUP BY lower(trim(bar_name))) n ON lower(trim(f.bar_id))=n.bar_key ORDER BY ROUND((f.classic+f.special+f.environment+f.service+f.value)/5.0,1) DESC,f.count DESC,f.updated_at DESC`).all();
@@ -32,17 +36,18 @@ export async function onRequestGet({request,env}){
 }
 
 export async function onRequestPost({request,env}){
+  await ensureFeedbackTextColumns(env);
   let body;try{body=await request.json()}catch{return json({error:"invalid json"},400)}
-  const barId=String(body.bar_id||"").trim(),device=String(body.device_hash||""),openid=await getOpenid(request,env),source=body.source === "mini_program" ? "mini_program" : "web";
+  const barId=String(body.bar_id||"").trim(),device=String(body.device_hash||""),openid=await getOpenid(request,env),source=body.source === "mini_program" ? "mini_program" : "web",note=String(body.note||"").trim().slice(0,500),tags=JSON.stringify([...new Set((Array.isArray(body.tags)?body.tags:[]).map(tag=>String(tag).trim().slice(0,24)).filter(Boolean))].slice(0,5));
   if(!barId||barId.length>120||(!openid&&!/^[a-f0-9]{64}$/.test(device)))return json({error:"invalid identity"},400);
   if(scoreFields.some(field=>!Number.isInteger(body[field])||body[field]<1||body[field]>5)||!["high","fair","low"].includes(body.rank_opinion))return json({error:"invalid rating"},400);
   const existing = openid
     ? await env.DB.prepare("SELECT id FROM community_feedback WHERE bar_id=? AND openid=?").bind(barId,openid).first()
     : await env.DB.prepare("SELECT id FROM community_feedback WHERE bar_id=? AND device_hash=?").bind(barId,device).first();
   if(existing){
-    await env.DB.prepare("UPDATE community_feedback SET openid=COALESCE(?,openid),classic_score=?,special_score=?,environment_score=?,service_score=?,value_score=?,rank_opinion=?,source=?,updated_at=CURRENT_TIMESTAMP WHERE id=?").bind(openid,...scoreFields.map(field=>body[field]),body.rank_opinion,source,existing.id).run();
+    await env.DB.prepare("UPDATE community_feedback SET openid=COALESCE(?,openid),classic_score=?,special_score=?,environment_score=?,service_score=?,value_score=?,rank_opinion=?,source=?,note=?,tags=?,updated_at=CURRENT_TIMESTAMP WHERE id=?").bind(openid,...scoreFields.map(field=>body[field]),body.rank_opinion,source,note,tags,existing.id).run();
   }else{
-    await env.DB.prepare("INSERT INTO community_feedback (bar_id,device_hash,openid,classic_score,special_score,environment_score,service_score,value_score,rank_opinion,source) VALUES (?,?,?,?,?,?,?,?,?,?)").bind(barId,device,openid,...scoreFields.map(field=>body[field]),body.rank_opinion,source).run();
+    await env.DB.prepare("INSERT INTO community_feedback (bar_id,device_hash,openid,classic_score,special_score,environment_score,service_score,value_score,rank_opinion,source,note,tags) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)").bind(barId,device,openid,...scoreFields.map(field=>body[field]),body.rank_opinion,source,note,tags).run();
   }
   return json({ok:true});
 }
