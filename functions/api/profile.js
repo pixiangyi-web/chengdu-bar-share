@@ -54,6 +54,8 @@ export async function onRequestGet({ request, env }) {
 }
 
 export async function onRequestPut({ request, env }) {
+  const membershipError = await requireMembership(request, env);
+  if (membershipError) return membershipError;
   const openid = await identity(request, env);
   if (!openid) return json({ error: "unauthorized" }, 401);
   let body;
@@ -73,3 +75,4 @@ export async function onRequestPut({ request, env }) {
     return json({ error: "profile unavailable" }, 503);
   }
 }
+import { requireMembership } from "../../lib/payment.js";

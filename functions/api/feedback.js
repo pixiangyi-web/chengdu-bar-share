@@ -1,3 +1,4 @@
+import { requireMembership } from "../../lib/payment.js";
 const scoreFields=["classic_score","special_score","environment_score","service_score","value_score"];
 const json=(data,status=200)=>Response.json(data,{status,headers:{"cache-control":"no-store"}});
 function base64urlBytes(value){
@@ -51,6 +52,8 @@ export async function onRequestGet({request,env}){
 }
 
 export async function onRequestPost({request,env}){
+  const membershipError = await requireMembership(request, env);
+  if (membershipError) return membershipError;
   await ensureFeedbackTextColumns(env);
   let body;try{body=await request.json()}catch{return json({error:"invalid json"},400)}
   const barId=String(body.bar_id||"").trim(),device=String(body.device_hash||""),openid=await getOpenid(request,env),source=body.source === "mini_program" ? "mini_program" : "web",note=String(body.note||"").trim().slice(0,500),tags=JSON.stringify([...new Set((Array.isArray(body.tags)?body.tags:[]).map(tag=>String(tag).trim().slice(0,24)).filter(Boolean))].slice(0,5));
