@@ -1,5 +1,10 @@
 const scoreFields=["classic_score","special_score","environment_score","service_score","value_score"];
 const json=(data,status=200)=>Response.json(data,{status,headers:{"cache-control":"no-store"}});
+function base64urlBytes(value){
+  const normalized=String(value).replace(/-/g,"+").replace(/_/g,"/");
+  const padding="=".repeat((4-normalized.length%4)%4);
+  return Uint8Array.from(atob(normalized+padding),char=>char.charCodeAt(0));
+}
 async function ensureFeedbackTextColumns(env){
   for(const sql of ["ALTER TABLE community_feedback ADD COLUMN note TEXT NOT NULL DEFAULT ''","ALTER TABLE community_feedback ADD COLUMN tags TEXT NOT NULL DEFAULT '[]'"]){try{await env.DB.prepare(sql).run()}catch{}}
 }
@@ -11,9 +16,9 @@ async function getOpenid(request,env){
   if(!payload||!signature||!secret)return null;
   try{
     const key=await crypto.subtle.importKey("raw",new TextEncoder().encode(secret),{name:"HMAC",hash:"SHA-256"},false,["verify"]);
-    const bytes=Uint8Array.from(atob(signature.replace(/-/g,"+").replace(/_/g,"/")+"=="),char=>char.charCodeAt(0));
+    const bytes=base64urlBytes(signature);
     const valid=await crypto.subtle.verify("HMAC",key,bytes,new TextEncoder().encode(payload));
-    const data=JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(payload.replace(/-/g,"+").replace(/_/g,"/")+"=="),char=>char.charCodeAt(0))));
+    const data=JSON.parse(new TextDecoder().decode(base64urlBytes(payload)));
     return valid&&data.exp>Math.floor(Date.now()/1000)?data.openid:null;
   }catch{return null}
 }
