@@ -1,11 +1,16 @@
 import { failure, PaymentError, PRODUCT, reconcile } from "../../lib/payment.js";
-import { decryptMessage, parseMessage, verifyMessage } from "../../lib/payment-notify.js";
+import { decryptMessage, decryptRaw, parseMessage, verifyMessage } from "../../lib/payment-notify.js";
 
 export async function onRequestGet({ request, env }) {
   try {
     const params = new URL(request.url).searchParams;
+    const echostr = params.get("echostr") || "";
+    if (params.get("msg_signature") && echostr) {
+      await verifyMessage(params, env, echostr);
+      return new Response(decryptRaw(echostr, env), { headers: { "content-type": "text/plain" } });
+    }
     await verifyMessage(params, env);
-    return new Response(params.get("echostr") || "", { headers: { "content-type": "text/plain" } });
+    return new Response(echostr, { headers: { "content-type": "text/plain" } });
   } catch (error) { return failure(error); }
 }
 export async function onRequestPost({ request, env }) {
