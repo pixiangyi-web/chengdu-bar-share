@@ -24,7 +24,24 @@ export async function onRequestPut({request,env}){
   const openid=await identity(request,env);if(!isAdmin(openid,env))return json({error:"forbidden"},403);
   let body;try{body=await request.json()}catch{return json({error:"invalid json"},400)}
   await ensureOverrides(env);
-  if(body.action==="tag_status"){
+  if(body.action==="approve_tags"){
+    const barName=String(body.bar_name||'').trim();
+    const selected=new Set(Array.isArray(body.tags)?body.tags.filter(tag=>typeof tag==='string'):[]);
+    if(!barName||!selected.size)return json({error:'请选择待审标签'},400);
+    const {results}=await env.DB.prepare("SELECT id,suggested_tags FROM bar_tag_suggestions WHERE lower(trim(bar_name))=lower(?) AND status='pending'").bind(barName).all();
+    const approved=new Set(),statements=[];
+    for(const row of results){
+      const tags=JSON.parse(row.suggested_tags||'[]');
+      const matches=tags.filter(tag=>selected.has(tag));
+      if(!matches.length)continue;
+      matches.forEach(tag=>approved.add(tag));
+      const remaining=tags.filter(tag=>!selected.has(tag));
+      statements.push(env.DB.prepare("UPDATE bar_tag_suggestions SET suggested_tags=?,status=?,reviewed_at=CASE WHEN ?='pending' THEN NULL ELSE CURRENT_TIMESTAMP END WHERE id=? AND status='pending'").bind(JSON.stringify(remaining.length?remaining:tags),remaining.length?'pending':'accepted',remaining.length?'pending':'accepted',row.id));
+    }
+    if(!approved.size)return json({error:'标签已处理，请刷新'},409);
+    statements.push(env.DB.prepare("INSERT INTO bar_tag_suggestions (bar_name,suggested_tags,note,device_hash,source,status,reviewed_at) VALUES (?,?,'',?,'mini_program','accepted',CURRENT_TIMESTAMP)").bind(barName,JSON.stringify([...approved]),crypto.randomUUID()));
+    await env.DB.batch(statements);
+  }else if(body.action==="tag_status"){
     const status=["pending","accepted","rejected"].includes(body.status)?body.status:"pending";
     await env.DB.prepare("UPDATE bar_tag_suggestions SET status=?,reviewed_at=CASE WHEN ?='pending' THEN NULL ELSE CURRENT_TIMESTAMP END WHERE id=?").bind(status,status,Number(body.id)).run();
   }else if(body.action==="nomination_status"){
