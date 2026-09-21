@@ -436,7 +436,7 @@
       "name": "BAR.Chill",
       "average": 74,
       "type": "鸡尾酒吧",
-      "area": "宏济/九眼桥",
+      "area": "宏济",
       "areaKey": "宏济",
       "scores": {
         "total": 37.99,
@@ -591,8 +591,8 @@
       "name": "Reply",
       "average": 134,
       "type": "创意鸡尾酒吧",
-      "area": "宏济新路/九眼桥",
-      "areaKey": "宏济新路",
+      "area": "宏济",
+      "areaKey": "宏济",
       "scores": {
         "total": 34.49,
         "professional": 70,
@@ -696,8 +696,8 @@
       "name": "Natural",
       "average": 115,
       "type": "Speakeasy鸡尾酒吧",
-      "area": "宏济新路/九眼桥",
-      "areaKey": "宏济新路",
+      "area": "宏济",
+      "areaKey": "宏济",
       "scores": {
         "total": 32.03,
         "professional": 0,
@@ -1747,7 +1747,7 @@
       "name": "柗",
       "average": 50,
       "type": "综合清吧",
-      "area": "宏济/九眼桥",
+      "area": "宏济",
       "areaKey": "宏济",
       "scores": {
         "total": 13.91,
