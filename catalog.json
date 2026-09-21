@@ -436,8 +436,8 @@
       "name": "BAR.Chill",
       "average": 74,
       "type": "鸡尾酒吧",
-      "area": "凤凰大街",
-      "areaKey": "凤凰大街",
+      "area": "宏济/九眼桥",
+      "areaKey": "宏济",
       "scores": {
         "total": 37.99,
         "professional": 85,
@@ -1258,8 +1258,8 @@
       "name": "Set The Bar",
       "average": 117,
       "type": "鸡尾酒餐酒吧",
-      "area": "春熙路/太古里",
-      "areaKey": "春熙路",
+      "area": "海椒市/莲花西路",
+      "areaKey": "海椒市",
       "scores": {
         "total": 22.28,
         "professional": 0,
@@ -1500,8 +1500,8 @@
       "name": "Lotus",
       "average": 94,
       "type": "综合清吧",
-      "area": "海椒市",
-      "areaKey": "海椒市",
+      "area": "南门",
+      "areaKey": "南门",
       "scores": {
         "total": 17.47,
         "professional": 60,
@@ -1747,8 +1747,8 @@
       "name": "柗",
       "average": 50,
       "type": "综合清吧",
-      "area": "双桥子/水碾河",
-      "areaKey": "双桥子",
+      "area": "宏济/九眼桥",
+      "areaKey": "宏济",
       "scores": {
         "total": 13.91,
         "professional": 0,
@@ -1837,7 +1837,7 @@
       "rank": 73,
       "name": "大鱼",
       "average": 89,
-      "type": "综合清吧",
+      "type": "精酿吧",
       "area": "九眼桥",
       "areaKey": "九眼桥",
       "scores": {
@@ -2316,7 +2316,7 @@
       "rank": 94,
       "name": "矩阵",
       "average": 102,
-      "type": "综合清吧",
+      "type": "精酿吧",
       "area": "大慈寺",
       "areaKey": "大慈寺",
       "scores": {
@@ -2362,7 +2362,7 @@
       "rank": 96,
       "name": "草台",
       "average": 81,
-      "type": "综合清吧",
+      "type": "精酿吧",
       "area": "双桥子/水碾河",
       "areaKey": "双桥子",
       "scores": {
