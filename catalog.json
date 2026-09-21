@@ -33,7 +33,7 @@
       "name": "La Beato",
       "average": 113,
       "type": "创意鸡尾酒吧",
-      "area": "宏济/九眼桥",
+      "area": "九眼桥",
       "areaKey": "九眼桥",
       "scores": {
         "total": 70.72,
@@ -60,7 +60,7 @@
       "name": "SEMMERING",
       "average": 122,
       "type": "特调鸡尾酒吧",
-      "area": "宏济/九眼桥",
+      "area": "九眼桥",
       "areaKey": "九眼桥",
       "scores": {
         "total": 67.49,
@@ -167,7 +167,7 @@
       "name": "Bar.COWCOW",
       "average": 119,
       "type": "特调酒吧",
-      "area": "宏济/九眼桥",
+      "area": "九眼桥",
       "areaKey": "九眼桥",
       "scores": {
         "total": 49.97,
@@ -359,7 +359,7 @@
       "name": "吐真剂 TruthSerum bar",
       "average": 115,
       "type": "鸡尾酒酒廊",
-      "area": "宏济/九眼桥",
+      "area": "九眼桥",
       "areaKey": "九眼桥",
       "scores": {
         "total": 42.44,
@@ -409,7 +409,7 @@
       "name": "MEDISN·药厂",
       "average": 121,
       "type": "精酿 Taproom",
-      "area": "宏济/九眼桥",
+      "area": "九眼桥",
       "areaKey": "九眼桥",
       "scores": {
         "total": 38,
@@ -565,7 +565,7 @@
       "name": "fuddy Duddy",
       "average": 121,
       "type": "威士忌鸡尾酒餐吧",
-      "area": "宏济/九眼桥",
+      "area": "九眼桥",
       "areaKey": "九眼桥",
       "scores": {
         "total": 35.18,
@@ -591,7 +591,7 @@
       "name": "Reply",
       "average": 134,
       "type": "创意鸡尾酒吧",
-      "area": "宏济/九眼桥",
+      "area": "九眼桥",
       "areaKey": "九眼桥",
       "scores": {
         "total": 34.49,
@@ -617,7 +617,7 @@
       "name": "貘湾 MO NOCHES BAR",
       "average": 110,
       "type": "龙舌兰/鸡尾酒吧",
-      "area": "宏济/九眼桥",
+      "area": "九眼桥",
       "areaKey": "九眼桥",
       "scores": {
         "total": 34.48,
@@ -696,7 +696,7 @@
       "name": "Natural",
       "average": 115,
       "type": "Speakeasy鸡尾酒吧",
-      "area": "宏济/九眼桥",
+      "area": "九眼桥",
       "areaKey": "九眼桥",
       "scores": {
         "total": 32.03,
@@ -751,7 +751,7 @@
       "name": "Stirling",
       "average": 113,
       "type": "威士忌/鸡尾酒吧",
-      "area": "宏济/九眼桥",
+      "area": "九眼桥",
       "areaKey": "九眼桥",
       "scores": {
         "total": 29.88,
@@ -831,7 +831,7 @@
       "name": "柱子",
       "average": 120,
       "type": "精酿吧",
-      "area": "宏济/九眼桥",
+      "area": "九眼桥",
       "areaKey": "九眼桥",
       "scores": {
         "total": 28.69,
@@ -990,7 +990,7 @@
       "name": "Stir&Strain",
       "average": 97,
       "type": "鸡尾酒餐酒吧",
-      "area": "宏济/九眼桥",
+      "area": "九眼桥",
       "areaKey": "九眼桥",
       "scores": {
         "total": 24.63,
@@ -1838,7 +1838,7 @@
       "name": "大鱼",
       "average": 89,
       "type": "精酿吧",
-      "area": "宏济/九眼桥",
+      "area": "九眼桥",
       "areaKey": "九眼桥",
       "scores": {
         "total": 13.5,
